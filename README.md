@@ -12,8 +12,11 @@
     <a href="LICENSE">
       <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License: MIT" />
     </a>
-    <a href="https://github.com/garc-kt/riot-launcher/actions">
-      <img src="https://img.shields.io/badge/Platform-Windows%20x64-0078D6.svg?style=for-the-badge&logo=windows" alt="Platform: Windows x64" />
+    <a href="https://github.com/sponsors/garc-kt">
+      <img src="https://img.shields.io/badge/Sponsor-garc--kt-ea4aaa?style=for-the-badge&logo=githubsponsors" alt="Sponsor on GitHub" />
+    </a>
+    <a href="https://ko-fi.com/garckt">
+      <img src="https://img.shields.io/badge/Ko--fi-garckt-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white" alt="Support on Ko-fi" />
     </a>
   </p>
 </div>
@@ -103,6 +106,17 @@ pnpm run dev:app       # Companion app Vite dev server
 pnpm run dev:loader    # Desktop launcher Vite dev server
 pnpm run dev:plugins   # Preload bundle Vite dev server
 ```
+
+---
+
+## 💖 Sponsoring & Support
+
+If you find Riot Loader useful and want to support continued development and maintenance:
+
+- **GitHub Sponsors**: [github.com/sponsors/garc-kt](https://github.com/sponsors/garc-kt)
+- **Ko-fi**: [ko-fi.com/garckt](https://ko-fi.com/garckt)
+
+Your support helps keep the project open-source, maintained against League client patches, and continuously improving!
 
 ---
 
