@@ -31,74 +31,74 @@ const getPlayerParticipant = (match: any) => {
 </script>
 
 <template>
-  <div class="cp-space-y-4">
+  <div class="space-y-4">
     <!-- Header with Filter -->
-    <div class="cp-flex cp-items-center cp-justify-between">
-      <h3 class="cp-text-sm cp-font-semibold cp-text-[#f0e6d2]">
+    <div class="flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-[var(--hud-foreground)]">
         Recent Matches ({{ matchesStore.filteredMatches.length }})
       </h3>
       <PatchFilter />
     </div>
 
     <!-- Match List -->
-    <div class="cp-space-y-2">
+    <div class="space-y-2">
       <div
         v-for="match in matchesStore.filteredMatches"
         :key="match.gameId"
-        class="cp-overflow-hidden cp-rounded cp-border cp-border-[#1e282d] cp-bg-[#091428]"
+        class="overflow-hidden rounded border border-[var(--hud-border)] bg-[rgba(255,255,255,0.04)]"
       >
         <!-- Summary Row -->
         <div
           @click="toggleExpand(match.gameId)"
-          class="cp-flex cp-cursor-pointer cp-items-center cp-justify-between cp-p-3 cp-transition-colors hover:cp-bg-[#0e1e2d]"
-          :class="getPlayerParticipant(match).win ? 'cp-border-l-4 cp-border-l-[#0ac8b9]' : 'cp-border-l-4 cp-border-l-rose-500'"
+          class="flex cursor-pointer items-center justify-between p-3 transition-colors hover:bg-[rgba(255,255,255,0.04)]"
+          :class="getPlayerParticipant(match).win ? 'border-l-4 border-l-[var(--hud-foreground)]' : 'border-l-4 border-l-destructive'"
         >
-          <div class="cp-flex cp-items-center cp-gap-3">
-            <div class="cp-text-left">
+          <div class="flex items-center gap-3">
+            <div class="text-left">
               <span
-                class="cp-text-xs cp-font-bold"
-                :class="getPlayerParticipant(match).win ? 'cp-text-[#0ac8b9]' : 'cp-text-rose-400'"
+                class="text-xs font-bold"
+                :class="getPlayerParticipant(match).win ? 'text-[var(--hud-foreground)]' : 'text-destructive'"
               >
                 {{ getPlayerParticipant(match).win ? 'VICTORY' : 'DEFEAT' }}
               </span>
-              <div class="cp-text-[11px] cp-text-[#a09b8c]">
+              <div class="text-[11px] text-[var(--hud-foreground-muted)]">
                 {{ formatDuration(match.gameDuration) }}
               </div>
             </div>
 
             <!-- Champion Info -->
-            <div class="cp-text-left">
-              <div class="cp-text-sm cp-font-bold cp-text-[#f0e6d2]">
+            <div class="text-left">
+              <div class="text-sm font-bold text-[var(--hud-foreground)]">
                 {{ getPlayerParticipant(match).championName || `Champ #${getPlayerParticipant(match).championId || '?'}` }}
               </div>
-              <div class="cp-text-xs cp-text-[#a09b8c]">
+              <div class="text-xs text-[var(--hud-foreground-muted)]">
                 {{ match.gameMode }}
               </div>
             </div>
           </div>
 
           <!-- KDA & Gold -->
-          <div class="cp-flex cp-items-center cp-gap-6">
-            <div class="cp-text-right">
-              <div class="cp-text-sm cp-font-semibold cp-text-[#f0e6d2]">
+          <div class="flex items-center gap-6">
+            <div class="text-right">
+              <div class="text-sm font-semibold text-[var(--hud-foreground)]">
                 {{ getPlayerParticipant(match).kills ?? 0 }} /
-                <span class="cp-text-rose-400">{{ getPlayerParticipant(match).deaths ?? 0 }}</span> /
+                <span class="text-[var(--hud-foreground-muted)]">{{ getPlayerParticipant(match).deaths ?? 0 }}</span> /
                 {{ getPlayerParticipant(match).assists ?? 0 }}
               </div>
-              <div class="cp-text-[11px] cp-text-[#a09b8c]">
+              <div class="text-[11px] text-[var(--hud-foreground-muted)]">
                 {{ (getPlayerParticipant(match).totalDamageDealtToChampions || 0).toLocaleString() }} Dmg
               </div>
             </div>
 
-            <button class="cp-text-[#a09b8c] hover:cp-text-[#f0e6d2]">
-              <ChevronUp v-if="expandedMatchId === match.gameId" class="cp-h-4 cp-w-4" />
-              <ChevronDown v-else class="cp-h-4 cp-w-4" />
+            <button class="text-[var(--hud-foreground-muted)] hover:text-[var(--hud-foreground)]">
+              <ChevronUp v-if="expandedMatchId === match.gameId" class="h-4 w-4" />
+              <ChevronDown v-else class="h-4 w-4" />
             </button>
           </div>
         </div>
 
         <!-- Expanded Scoreboard -->
-        <div v-if="expandedMatchId === match.gameId" class="cp-border-t cp-border-[#1e282d] cp-p-3">
+        <div v-if="expandedMatchId === match.gameId" class="border-t border-[var(--hud-border)] p-3">
           <MatchScoreboard :match="match" />
         </div>
       </div>

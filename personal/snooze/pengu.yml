@@ -1,0 +1,9 @@
+name: Snooze Personal
+version: 1.0.0
+description: Personal port of Snooze Manager modules onto Riot Loader kernel
+author:
+  name: SnoozeFest
+  github: ReformedDoge
+tags:
+  - qol
+  - personal

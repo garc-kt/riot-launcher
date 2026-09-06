@@ -5,8 +5,8 @@ import {
   MatchParticipantSchema,
   MatchHistoryItemSchema,
   GameflowPhaseSchema,
-} from '../app/src/services/lcu/schemas.ts'
-import { normalizeMatchGame } from '../app/src/services/lcu/client.ts'
+} from '../packages/lcu/src/schemas.ts'
+import { normalizeMatchGame } from '../packages/lcu/src/client.ts'
 
 describe('LCU Runtime Validation Schemas', () => {
   test('valid summoner parses successfully with defaults', () => {

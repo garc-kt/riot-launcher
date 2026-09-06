@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test'
 import assert from 'node:assert/strict'
-import { extractSpecialRules } from '../plugins/src/preload/theming/index.ts'
+import { extractSpecialRules } from '../packages/contracts/src/theming.ts'
 
 describe('Native Theming Engine', () => {
   test('extracts @import rules cleanly from CSS', () => {

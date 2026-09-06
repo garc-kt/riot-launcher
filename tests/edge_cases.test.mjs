@@ -1,8 +1,8 @@
 import { test, describe } from 'node:test'
 import assert from 'node:assert/strict'
-import { extractSpecialRules } from '../plugins/src/preload/theming/index.ts'
+import { extractSpecialRules } from '../packages/contracts/src/theming.ts'
 import { createScopedStore } from '../plugins/src/preload/ext/index.ts'
-import { MatchHistoryItemSchema } from '../app/src/services/lcu/schemas.ts'
+import { MatchHistoryItemSchema } from '../packages/lcu/src/schemas.ts'
 
 describe('Edge Cases & Boundary Conditions', () => {
   test('theming engine handles empty, nullish, or whitespace-only CSS', () => {

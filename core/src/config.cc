@@ -187,7 +187,7 @@ namespace config::options
         return get_config_value_bool(__func__, false);
     }
 
-    bool isecure_mode()
+    bool insecure_mode()
     {
         return get_config_value_bool(__func__, false);
     }
@@ -203,6 +203,11 @@ namespace config::options
     }
 
     bool use_proxy()
+    {
+        return get_config_value_bool(__func__, false);
+    }
+
+    bool no_preload_ext()
     {
         return get_config_value_bool(__func__, false);
     }

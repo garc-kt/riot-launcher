@@ -12,7 +12,19 @@ window.Toast = {
   },
 
   error(message) {
-    toast.error(message, options)
+    toast.error(message, options);
+  },
+
+  info(message) {
+    toast(message, { ...options, icon: 'ℹ️' });
+  },
+
+  warning(message) {
+    toast(message, { ...options, icon: '⚠️' });
+  },
+
+  dismiss(toastId?: string) {
+    toast.dismiss(toastId);
   },
 
   promise(promise, msg) {

@@ -25,7 +25,7 @@ onMounted(async () => {
 
 <template>
   <div
-    class="h-screen flex flex-col bg-background text-foreground transition-colors duration-250 selection:bg-primary/30 overflow-hidden"
+    class="h-screen flex flex-col bg-background text-foreground transition-colors duration-200 selection:bg-signal/25 overflow-hidden"
     :class="`theme-${themeMode}`"
   >
     <template v-if="ready">

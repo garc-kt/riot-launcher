@@ -1,3 +1,6 @@
+// build-time constants (see plugins/vite.config.ts `define`)
+declare const __APP_VERSION__: string;
+
 // internal types
 
 interface Plugin {
@@ -26,13 +29,19 @@ interface Action {
 
 interface CommandBar {
   addAction: (action: Action) => void
+  removeAction: (id: string) => void
   show: () => void
+  hide: () => void
+  toggle: () => void
   update: () => void
 }
 
 interface Toast {
   success: (message: string) => void
   error: (message: string) => void
+  info: (message: string) => void
+  warning: (message: string) => void
+  dismiss: (toastId?: string) => void
   promise: <T>(
     promise: Promise<T>,
     msg: { loading: string, success: string, error: string }

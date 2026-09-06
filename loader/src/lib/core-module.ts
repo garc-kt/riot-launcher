@@ -5,7 +5,6 @@ import { LeagueClient } from './league-client'
 export enum ActivationMode {
   Universal = 0,
   Targeted,
-  OnDemand,
 }
 
 export const CoreModule = new class {

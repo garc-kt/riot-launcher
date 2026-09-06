@@ -74,11 +74,6 @@
         "unminimize": true
       }
     },
-    "systemTray": {
-      "title": "Riot Loader",
-      "iconPath": "icons/icon.png",
-      "iconAsTemplate": false
-    },
     "security": {
       "csp": null
     },

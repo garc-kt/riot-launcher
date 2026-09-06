@@ -22,22 +22,22 @@ const selectLang = async (e: Event) => {
 <template>
   <div class="flex flex-col justify-center items-center my-auto p-6 select-none">
     <div class="mb-6 text-center">
-      <h2 class="text-2xl font-bold tracking-[0.16em] uppercase text-foreground font-serif">
-        {{ i18n.t('welcome') }}
+      <h2 class="text-xl font-semibold text-foreground">
+        {{ i18n.t('Welcome') }}
       </h2>
-      <p class="text-xs text-muted-foreground mt-1 tracking-wider uppercase font-mono">
-        Riot Client Companion
+      <p class="text-xs text-foreground-subtle mt-1 font-data">
+        {{ i18n.t('Riot client companion') }}
       </p>
     </div>
 
-    <div class="riot-card p-6 rounded-lg flex flex-col gap-5 max-w-sm w-full">
+    <div class="riot-card p-6 flex flex-col gap-5 max-w-sm w-full">
       <div class="space-y-1.5">
-        <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground font-serif pl-1">
-          {{ i18n.t('choose_lang') }}
+        <label class="text-[11px] font-medium text-foreground-muted pl-0.5">
+          {{ i18n.t('Choose your language') }}
         </label>
         <select
           :value="config.app.language()"
-          class="riot-input w-full rounded px-3 py-2 text-xs cursor-pointer"
+          class="riot-input w-full px-3 py-2 text-xs cursor-pointer"
           @change="selectLang"
         >
           <option v-for="lang in i18n.languages" :key="lang.id" :value="lang.id">
@@ -50,21 +50,21 @@ const selectLang = async (e: Event) => {
         <input
           v-model="accepted"
           type="checkbox"
-          class="mt-1 size-4 rounded cursor-pointer accent-[var(--hextech-gold)]"
+          class="mt-1 size-4 rounded-sm cursor-pointer accent-foreground"
         />
         <div class="flex flex-col">
-          <span class="text-xs font-bold text-foreground">{{ i18n.t('accept_tos') }}</span>
-          <p class="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{{ i18n.t('tos_content') }}</p>
+          <span class="text-xs font-medium text-foreground">{{ i18n.t('Accept terms and conditions') }}</span>
+          <p class="text-[11px] text-foreground-muted leading-relaxed mt-0.5">{{ i18n.t('Riot Loader is client-safe, but using exploit plugins could get you banned.') }}</p>
         </div>
       </label>
 
       <div class="mt-2">
         <button
-          class="riot-btn-primary w-full py-2.5 px-4 rounded text-xs disabled:opacity-40 disabled:pointer-events-none"
+          class="riot-btn-primary w-full py-2.5 px-4 text-xs disabled:opacity-40 disabled:pointer-events-none"
           :disabled="!accepted"
           @click="emit('done')"
         >
-          {{ i18n.t('get_started') }}
+          {{ i18n.t('Get started') }}
         </button>
       </div>
     </div>

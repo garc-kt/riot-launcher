@@ -181,6 +181,10 @@ static void LoadPlugins(V8Object *window)
     auto disabledPlugins = CefStr(config::disabled_plugins());
     pengu->set(&u"disabledPlugins"_s, V8Value::string(&disabledPlugins), V8_PROPERTY_ATTRIBUTE_NONE);
 
+    // Pengu.no_preload_ext (escape hatch)
+    bool noPreloadExt = config::options::no_preload_ext();
+    pengu->set(&u"no_preload_ext"_s, V8Value::boolean(noPreloadExt), V8_PROPERTY_ATTRIBUTE_READONLY);
+
     // Add Pengu and Companion to window.
     window->set(&u"Pengu"_s, pengu, V8_PROPERTY_ATTRIBUTE_READONLY);
     window->set(&u"Companion"_s, pengu, V8_PROPERTY_ATTRIBUTE_READONLY);

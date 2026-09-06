@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@riot/contracts": ["../../packages/contracts/src/index.ts"],
+      "@riot/contracts/*": ["../../packages/contracts/src/*"],
+      "@riot/lcu": ["../../packages/lcu/src/index.ts"],
+      "@riot/lcu/*": ["../../packages/lcu/src/*"],
+      "@/*": ["../../app/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts"]
+}

@@ -1,7 +1,7 @@
 import { test, describe } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { detectUpstreamConflict } from '../loader/src/lib/conflict.ts'
+import { detectUpstreamConflict } from '../packages/contracts/src/conflict.ts'
 
 describe('Upstream Coexistence Conflict Detection (§9.1)', () => {
   test('refuses to activate when Pengu Loader directory exists', () => {

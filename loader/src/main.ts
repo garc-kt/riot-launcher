@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import { createLoaderI18n } from '@riot/i18n'
 import './App.css'
 import 'tippy.js/dist/tippy.css'
 
@@ -10,4 +11,6 @@ window.appVersion = __VERSION__
 // @ts-ignore
 window.isMac = false
 
-createApp(App).mount('#root')
+const i18n = createLoaderI18n()
+
+createApp(App).use(i18n).mount('#root')

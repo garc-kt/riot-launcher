@@ -13,49 +13,49 @@ const formatDuration = (seconds: number) => {
 </script>
 
 <template>
-  <div class="cp-rounded-lg cp-border cp-border-[#1e282d] cp-bg-[#091428] cp-p-4 cp-space-y-3">
-    <div class="cp-flex cp-items-center cp-justify-between cp-text-xs cp-text-[#a09b8c]">
+  <div class="rounded-lg border border-[var(--hud-border)] bg-[rgba(255,255,255,0.04)] p-4 space-y-3">
+    <div class="flex items-center justify-between text-xs text-[var(--hud-foreground-muted)]">
       <span>Game Mode: {{ match.gameMode }}</span>
       <span>Duration: {{ formatDuration(match.gameDuration) }}</span>
       <span>Version: {{ match.gameVersion }}</span>
     </div>
 
     <!-- Participants Table -->
-    <div class="cp-overflow-x-auto">
-      <table class="cp-w-full cp-text-left cp-text-xs">
-        <thead class="cp-border-b cp-border-[#1e282d] cp-text-[#a09b8c]">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs">
+        <thead class="border-b border-[var(--hud-border)] text-[var(--hud-foreground-muted)]">
           <tr>
-            <th class="cp-pb-2">Player</th>
-            <th class="cp-pb-2">KDA</th>
-            <th class="cp-pb-2">Damage</th>
-            <th class="cp-pb-2">CS</th>
-            <th class="cp-pb-2">Gold</th>
+            <th class="pb-2">Player</th>
+            <th class="pb-2">KDA</th>
+            <th class="pb-2">Damage</th>
+            <th class="pb-2">CS</th>
+            <th class="pb-2">Gold</th>
           </tr>
         </thead>
-        <tbody class="cp-divide-y cp-divide-[#1e282d]/50">
+        <tbody class="divide-y divide-[var(--hud-border)]/50">
           <tr
             v-for="p in match.participants"
             :key="p.puuid"
-            :class="p.win ? 'hover:cp-bg-emerald-950/20' : 'hover:cp-bg-rose-950/20'"
+            :class="p.win ? 'hover:bg-[rgba(255,255,255,0.06)]' : 'hover:bg-destructive/10'"
           >
-            <td class="cp-py-2 cp-flex cp-items-center cp-gap-2">
-              <span class="cp-font-medium cp-text-[#f0e6d2]">
+            <td class="py-2 flex items-center gap-2">
+              <span class="font-medium text-[var(--hud-foreground)]">
                 {{ p.championName || `Champ #${p.championId}` }}
               </span>
-              <span class="cp-text-[10px] cp-text-[#a09b8c]">
+              <span class="text-[10px] text-[var(--hud-foreground-muted)]">
                 ({{ p.summonerName }})
               </span>
             </td>
-            <td class="cp-py-2 cp-text-[#f0e6d2]">
+            <td class="py-2 text-[var(--hud-foreground)]">
               {{ p.kills }} / {{ p.deaths }} / {{ p.assists }}
             </td>
-            <td class="cp-py-2 cp-text-[#f0e6d2]">
+            <td class="py-2 text-[var(--hud-foreground)]">
               {{ p.totalDamageDealtToChampions.toLocaleString() }}
             </td>
-            <td class="cp-py-2 cp-text-[#f0e6d2]">
+            <td class="py-2 text-[var(--hud-foreground)]">
               {{ p.totalMinionsKilled + p.neutralMinionsKilled }}
             </td>
-            <td class="cp-py-2 cp-text-[#f0e6d2]">
+            <td class="py-2 text-[var(--hud-foreground)]">
               {{ p.goldEarned.toLocaleString() }}
             </td>
           </tr>

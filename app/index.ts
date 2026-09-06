@@ -1,5 +1,7 @@
 import { bootstrapCompanion, teardownCompanion } from './src/main'
-import { createLifecycleManager } from './src/services/lifecycle.ts'
+import { createLifecycleManager } from '@riot/contracts/lifecycle'
+import { lcuClient } from './src/services/lcu/client'
+import { bootstrapModules, loadModules, getModuleHost } from './src/modules'
 import type { PluginContext } from './src/types'
 
 let pluginContext: PluginContext | null = null
@@ -14,6 +16,7 @@ const lifecycle = createLifecycleManager({
 export async function init(context: PluginContext) {
   pluginContext = context
   ;(window as any).__companion_context = context
+  lcuClient.bind(context)
 
   // Register command palette action via context.ext.commands (§9.2)
   if (context.ext?.commands) {
@@ -43,10 +46,18 @@ export async function init(context: PluginContext) {
     })
   }
 
-  // Panic hotkey kill-switch: Ctrl+Shift+Alt+K immediately tears down companion
+  // Panic hotkey kill-switch: Ctrl+Shift+Alt+K immediately tears down the
+  // companion UI AND every effect module — previously this only unmounted
+  // Vue, leaving any ported module running after a "kill everything" hotkey.
   window.addEventListener('keydown', (e) => {
+    const wasKilled = lifecycle.isKilled()
     lifecycle.handleKeyDown(e)
+    if (!wasKilled && lifecycle.isKilled()) {
+      getModuleHost()?.unloadAll().catch(err => console.error('[Companion] Module teardown on kill-switch failed:', err))
+    }
   })
+
+  await bootstrapModules(context)
 
   console.info('[Companion] Initialized successfully with context:', context)
 }
@@ -54,8 +65,9 @@ export async function init(context: PluginContext) {
 /**
  * Called on native window 'load' event
  */
-export function load() {
+export async function load() {
   lifecycle.load()
+  await loadModules()
 }
 
 // Default export for compatibility

@@ -6,6 +6,7 @@ use std::env;
 
 mod config;
 mod shell;
+mod startup;
 
 #[cfg(windows)]
 mod windows;
@@ -55,6 +56,7 @@ fn main() -> Result<(), Error> {
         .setup_platform()
         .plugin(config::init())
         .plugin(shell::init())
+        .plugin(startup::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 

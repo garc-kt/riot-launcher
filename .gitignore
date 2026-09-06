@@ -229,12 +229,11 @@ PublishScripts/
 *.nupkg
 # NuGet Symbol Packages
 *.snupkg
-# The packages folder can be ignored because of Package Restore
-**/[Pp]ackages/*
-# except build/, which is used as an MSBuild target.
-!**/[Pp]ackages/build/
-# Uncomment if necessary however generally it will be regenerated when needed
-#!**/[Pp]ackages/repositories.config
+# NOTE: this project does not use NuGet package-restore, and the pnpm
+# workspace's real `packages/*` (contracts, lcu, i18n, ui) lives at the repo
+# root — the classic `**/[Pp]ackages/*` NuGet-restore ignore rule used to sit
+# here and silently excluded all of it from git. Removed rather than scoped,
+# since there is no NuGet packages/ folder anywhere in this repo to protect.
 # NuGet v3's project.json files produces more ignorable files
 *.nuget.props
 *.nuget.targets
@@ -456,7 +455,6 @@ Temporary Items
 ### Project defines ###
 
 bin/*
-packages/
 include/
 *.g.h
 *.tsbuildinfo

@@ -12,19 +12,19 @@ const mockBuild = {
 </script>
 
 <template>
-  <div class="cp-rounded-lg cp-border cp-border-[#1e282d] cp-bg-[#091428] cp-p-4 cp-space-y-4">
-    <h3 class="cp-text-sm cp-font-bold cp-text-[#f0e6d2]">
+  <div class="rounded-lg border border-[var(--hud-border)] bg-[rgba(255,255,255,0.04)] p-4 space-y-4">
+    <h3 class="text-sm font-bold text-[var(--hud-foreground)]">
       Recommended Build: {{ championName || 'Selected Champion' }}
     </h3>
 
     <!-- Starting Items -->
     <div>
-      <div class="cp-text-xs cp-font-semibold cp-text-[#a09b8c] cp-mb-1.5">Starting Items</div>
-      <div class="cp-flex cp-gap-2">
+      <div class="text-xs font-semibold text-[var(--hud-foreground-muted)] mb-1.5">Starting Items</div>
+      <div class="flex gap-2">
         <span
           v-for="item in mockBuild.starting"
           :key="item"
-          class="cp-rounded cp-border cp-border-[#1e282d] cp-bg-[#010a13] cp-px-2.5 cp-py-1 cp-text-xs cp-text-[#cdbe91]"
+          class="rounded border border-[var(--hud-border)] bg-[rgba(255,255,255,0.05)] px-2.5 py-1 text-xs text-[var(--hud-foreground)]"
         >
           {{ item }}
         </span>
@@ -33,12 +33,12 @@ const mockBuild = {
 
     <!-- Core Items -->
     <div>
-      <div class="cp-text-xs cp-font-semibold cp-text-[#a09b8c] cp-mb-1.5">Core Items</div>
-      <div class="cp-flex cp-gap-2">
+      <div class="text-xs font-semibold text-[var(--hud-foreground-muted)] mb-1.5">Core Items</div>
+      <div class="flex gap-2">
         <span
           v-for="item in mockBuild.core"
           :key="item"
-          class="cp-rounded cp-border cp-border-[#785a28] cp-bg-[#0e1e2d] cp-px-2.5 cp-py-1 cp-text-xs cp-font-medium cp-text-[#f0e6d2]"
+          class="rounded border border-[var(--hud-foreground-muted)] bg-[rgba(255,255,255,0.04)] px-2.5 py-1 text-xs font-medium text-[var(--hud-foreground)]"
         >
           {{ item }}
         </span>
@@ -47,12 +47,12 @@ const mockBuild = {
 
     <!-- Runes -->
     <div>
-      <div class="cp-text-xs cp-font-semibold cp-text-[#a09b8c] cp-mb-1.5">Runes</div>
-      <div class="cp-flex cp-flex-wrap cp-gap-1.5">
+      <div class="text-xs font-semibold text-[var(--hud-foreground-muted)] mb-1.5">Runes</div>
+      <div class="flex flex-wrap gap-1.5">
         <span
           v-for="rune in mockBuild.runes"
           :key="rune"
-          class="cp-rounded cp-bg-[#010a13] cp-px-2 cp-py-0.5 cp-text-[11px] cp-text-[#0ac8b9]"
+          class="rounded bg-[rgba(255,255,255,0.05)] px-2 py-0.5 text-[11px] text-[var(--hud-foreground-muted)]"
         >
           {{ rune }}
         </span>

@@ -1,9 +1,9 @@
 import { ref } from 'vue'
 
-export type ThemeMode = 'cosmic' | 'vanilla'
+export type ThemeMode = 'dark' | 'light'
 
 const ready = ref(false)
-const themeMode = ref<ThemeMode>('cosmic')
+const themeMode = ref<ThemeMode>('dark')
 const settingsVisible = ref(false)
 const searchQuery = ref('')
 
@@ -16,9 +16,9 @@ const settings = {
 const setThemeMode = (mode: ThemeMode) => {
   themeMode.value = mode
   if (typeof document !== 'undefined') {
-    document.documentElement.classList.remove('theme-cosmic', 'theme-vanilla')
+    document.documentElement.classList.remove('theme-dark', 'theme-light')
     document.documentElement.classList.add(`theme-${mode}`)
-    document.body.classList.remove('theme-cosmic', 'theme-vanilla')
+    document.body.classList.remove('theme-dark', 'theme-light')
     document.body.classList.add(`theme-${mode}`)
     try {
       localStorage.setItem('riot_theme_mode', mode)
@@ -27,19 +27,19 @@ const setThemeMode = (mode: ThemeMode) => {
 }
 
 const toggleThemeMode = () => {
-  setThemeMode(themeMode.value === 'cosmic' ? 'vanilla' : 'cosmic')
+  setThemeMode(themeMode.value === 'dark' ? 'light' : 'dark')
 }
 
 if (typeof document !== 'undefined') {
   try {
     const saved = localStorage.getItem('riot_theme_mode') as ThemeMode
-    if (saved === 'cosmic' || saved === 'vanilla') {
+    if (saved === 'dark' || saved === 'light') {
       setThemeMode(saved)
     } else {
-      setThemeMode('cosmic')
+      setThemeMode('dark')
     }
   } catch {
-    setThemeMode('cosmic')
+    setThemeMode('dark')
   }
 }
 

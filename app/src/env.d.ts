@@ -20,6 +20,16 @@ interface Window {
   }
   Companion?: any
   Pengu?: any
+  Toast?: {
+    success(message: string): void
+    error(message: string): void
+    // info/warning/dismiss are added to the preload's Toast in a later
+    // phase (see plugins/src/views/components/Toaster.tsx) — optional
+    // here so this typechecks against both the current and future shape.
+    info?(message: string): void
+    warning?(message: string): void
+    dismiss?(id?: string): void
+  }
   openDevTools?: () => void
   reloadClient?: () => void
   restartClient?: () => void

@@ -94,6 +94,18 @@ export interface SgpPlayerSummary {
   recentMatches: MatchHistoryItem[]
 }
 
+/** Matches ScopedStore from plugins/src/preload/ext/index.ts — duplicated
+ *  here rather than imported since app/ and plugins/ are peer workspaces
+ *  with no existing dependency edge, and this shape is small and stable. */
+export interface ScopedStore {
+  get<T = any>(key: string, defaultValue?: T): T | undefined
+  set<T = any>(key: string, value: T): boolean
+  delete(key: string): boolean
+  has(key: string): boolean
+  clear(): void
+  entries(): [string, any][]
+}
+
 export interface PluginContext {
   rcp: any
   socket: {
@@ -101,9 +113,12 @@ export interface PluginContext {
   }
   meta?: { name: string }
   ext?: {
-    store: any
+    store: ScopedStore
     fs: any
+    assets: any
     commands: any
     theme: any
+    ember?: any
+    net?: any
   }
 }

@@ -34,25 +34,25 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="cp-space-y-4">
+  <div class="space-y-4">
     <!-- Search Bar -->
-    <div class="cp-flex cp-gap-2">
-      <div class="cp-relative cp-flex-1">
-        <Search class="cp-absolute cp-left-3 cp-top-1/2 cp-h-4 cp-w-4 -cp-translate-y-1/2 cp-text-[#a09b8c]" />
+    <div class="flex gap-2">
+      <div class="relative flex-1">
+        <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--hud-foreground-muted)]" />
         <input
           v-model="query"
           type="text"
           placeholder="Enter PUUID or Riot ID..."
           @keydown.enter="handleSearch"
-          class="cp-w-full cp-rounded cp-border cp-border-[#1e282d] cp-bg-[#091428] cp-py-2 cp-pl-9 cp-pr-3 cp-text-sm cp-text-[#f0e6d2] placeholder:cp-text-[#a09b8c] focus:cp-border-[#c89b3c] focus:cp-outline-none"
+          class="w-full rounded border border-[var(--hud-border)] bg-[rgba(255,255,255,0.04)] py-2 pl-9 pr-3 text-sm text-[var(--hud-foreground)] placeholder:text-[var(--hud-foreground-muted)] focus:border-[var(--hud-foreground-muted)] focus:outline-none"
         />
       </div>
 
       <!-- Region Selector -->
-      <div class="cp-relative">
+      <div class="relative">
         <select
           v-model="selectedRegion"
-          class="cp-rounded cp-border cp-border-[#1e282d] cp-bg-[#091428] cp-px-3 cp-py-2 cp-text-sm cp-text-[#f0e6d2] focus:cp-border-[#c89b3c] focus:cp-outline-none"
+          class="rounded border border-[var(--hud-border)] bg-[rgba(255,255,255,0.04)] px-3 py-2 text-sm text-[var(--hud-foreground)] focus:border-[var(--hud-foreground-muted)] focus:outline-none"
         >
           <option v-for="reg in Object.keys(SGP_REGIONS)" :key="reg" :value="reg">
             {{ reg }}
@@ -63,47 +63,47 @@ onMounted(() => {
       <button
         @click="handleSearch"
         :disabled="loading"
-        class="cp-rounded cp-bg-[#c89b3c] cp-px-4 cp-py-2 cp-text-sm cp-font-semibold cp-text-[#010a13] hover:cp-bg-[#f0e6d2] disabled:cp-opacity-50"
+        class="hud-btn-primary px-4 py-2 text-sm"
       >
         Lookup
       </button>
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="cp-flex cp-items-center cp-justify-center cp-py-8">
-      <div class="cp-h-6 cp-w-6 cp-animate-spin cp-rounded-full cp-border-2 cp-border-[#c89b3c] cp-border-t-transparent" />
+    <div v-if="loading" class="flex items-center justify-center py-8">
+      <div class="h-6 w-6 animate-spin rounded-full border-2 border-[var(--hud-foreground-muted)] border-t-transparent" />
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="cp-rounded cp-border cp-border-rose-900 cp-bg-rose-950/40 cp-p-3 cp-text-sm cp-text-rose-300">
+    <div v-else-if="error" class="rounded border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
       {{ error }}
     </div>
 
     <!-- Results Display -->
-    <div v-else-if="result" class="cp-space-y-3">
-      <div class="cp-rounded-lg cp-border cp-border-[#1e282d] cp-bg-[#091428] cp-p-4">
-        <div class="cp-flex cp-items-center cp-justify-between">
+    <div v-else-if="result" class="space-y-3">
+      <div class="rounded-lg border border-[var(--hud-border)] bg-[rgba(255,255,255,0.04)] p-4">
+        <div class="flex items-center justify-between">
           <div>
-            <h3 class="cp-text-base cp-font-bold cp-text-[#f0e6d2]">{{ result.alias }}</h3>
-            <span class="cp-text-xs cp-text-[#a09b8c]">Region: {{ result.region }}</span>
+            <h3 class="text-base font-bold text-[var(--hud-foreground)]">{{ result.alias }}</h3>
+            <span class="text-xs text-[var(--hud-foreground-muted)]">Region: {{ result.region }}</span>
           </div>
-          <div v-if="result.rankedTier" class="cp-flex cp-items-center cp-gap-2">
-            <Award class="cp-h-5 cp-w-5 cp-text-[#c89b3c]" />
-            <span class="cp-text-sm cp-font-semibold cp-text-[#f0e6d2]">
+          <div v-if="result.rankedTier" class="flex items-center gap-2">
+            <Award class="h-5 w-5 text-[var(--hud-foreground-muted)]" />
+            <span class="text-sm font-semibold text-[var(--hud-foreground)]">
               {{ result.rankedTier }} {{ result.rankedDivision }} ({{ result.leaguePoints }} LP)
             </span>
           </div>
         </div>
 
-        <div class="cp-mt-4 cp-flex cp-items-center cp-gap-4 cp-border-t cp-border-[#1e282d] cp-pt-3 cp-text-xs cp-text-[#a09b8c]">
+        <div class="mt-4 flex items-center gap-4 border-t border-[var(--hud-border)] pt-3 text-xs text-[var(--hud-foreground-muted)]">
           <div>
-            <span class="cp-font-medium cp-text-[#f0e6d2]">{{ result.wins }}</span> Wins
+            <span class="font-medium text-[var(--hud-foreground)]">{{ result.wins }}</span> Wins
           </div>
           <div>
-            <span class="cp-font-medium cp-text-[#f0e6d2]">{{ result.losses }}</span> Losses
+            <span class="font-medium text-[var(--hud-foreground)]">{{ result.losses }}</span> Losses
           </div>
           <div v-if="result.wins + result.losses > 0">
-            <span class="cp-font-medium cp-text-[#f0e6d2]">
+            <span class="font-medium text-[var(--hud-foreground)]">
               {{ Math.round((result.wins / (result.wins + result.losses)) * 100) }}%
             </span> Win Rate
           </div>

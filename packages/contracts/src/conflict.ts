@@ -1,3 +1,13 @@
+/**
+ * TEST-ONLY MIRROR — this file does not ship. The Rust implementation at
+ * `loader/src-tauri/src/windows/utils.rs::detect_upstream_conflict()` is what
+ * actually runs (invoked via `plugin:windows|core_check_upstream_conflict`);
+ * this TS copy exists only so `tests/coexistence.test.mjs` can exercise the
+ * decision logic without a Windows build. Any change to the Rust function's
+ * conditions (directory list, IFEO substring checks, proxy-DLL comparison)
+ * MUST be mirrored here in the same commit, or the test suite silently stops
+ * proving anything about what ships.
+ */
 export interface ConflictCheckOptions {
   checkDirs?: string[]
   dirExists?: (path: string) => boolean

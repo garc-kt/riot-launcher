@@ -164,7 +164,7 @@ static void CEF_CALLBACK Hooked_OnBeforeCommandLineProcessing(
             &u"remote-debugging-port"_s, &CefStr(std::to_string(rdport)));
     }
 
-    if (config::options::isecure_mode())
+    if (config::options::insecure_mode())
     {
         command_line->append_switch(command_line, &u"disable-web-security"_s);
     }

@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "preserve",
+    "useDefineForClassFields": true,
+    "paths": {
+      "@riot/contracts": ["../contracts/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}

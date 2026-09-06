@@ -1,16 +1,20 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoot } from '../../lib/root'
+import { useI18n } from '../../lib/i18n'
 import TabGeneral from './TabGeneral.vue'
 import TabClient from './TabClient.vue'
+import TabThemes from './TabThemes.vue'
 import TabAbout from './TabAbout.vue'
 
 const { settings } = useRoot()
+const { t } = useI18n()
 
 const activeTabIndex = ref(0)
 const tabs = [
   { name: 'General', component: TabGeneral },
   { name: 'League Client', component: TabClient },
+  { name: 'Themes', component: TabThemes },
   { name: 'About', component: TabAbout },
 ]
 </script>
@@ -18,17 +22,13 @@ const tabs = [
 <template>
   <div
     v-if="settings.visible.value"
-    class="h-screen fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex justify-center items-center select-none"
+    class="h-screen fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex justify-center items-center select-none"
   >
     <div data-tauri-drag-region class="absolute top-0 w-full h-10" />
 
-    <div
-      class="border border-border rounded-lg relative flex w-[800px] h-[490px] shadow-2xl overflow-hidden bg-card"
-      style="box-shadow: inset 0 0 0 1px rgba(200, 170, 110, 0.15), 0 24px 48px rgba(0, 0, 0, 0.6);"
-    >
-      <!-- Close button -->
+    <div class="border border-border rounded-sm relative flex w-[800px] h-[490px] shadow-2xl overflow-hidden bg-surface">
       <button
-        class="absolute top-3 right-3 flex justify-center items-center size-7 text-muted-foreground hover:text-white hover:bg-destructive rounded cursor-pointer transition-colors z-10"
+        class="absolute top-3 right-3 flex justify-center items-center size-7 text-foreground-muted hover:text-destructive-foreground hover:bg-destructive rounded-sm cursor-pointer transition-colors z-10"
         @click="settings.hide"
       >
         <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
@@ -36,31 +36,29 @@ const tabs = [
         </svg>
       </button>
 
-      <!-- League Style Sidebar Navigation -->
-      <div class="flex flex-col border-r border-border p-4 w-[210px] py-6 bg-secondary/40">
-        <h1 class="text-muted-foreground text-[11px] font-bold uppercase tracking-[0.16em] mx-3 mb-3 font-serif">
-          Settings
+      <div class="flex flex-col border-r border-border p-3 w-[200px] py-6 bg-surface-2/60">
+        <h1 class="text-foreground-subtle text-[11px] font-medium mx-2 mb-3">
+          {{ t('Settings') }}
         </h1>
-        <nav class="flex flex-col space-y-1">
+        <nav class="flex flex-col space-y-0.5">
           <button
             v-for="(tabItem, index) in tabs"
             :key="tabItem.name"
-            class="px-3 py-2 rounded text-xs text-left transition-all cursor-pointer font-serif uppercase tracking-wider"
+            class="px-2.5 py-2 rounded-sm text-xs text-left transition-colors cursor-pointer"
             :class="activeTabIndex === index
-              ? 'border-l-2 border-primary bg-primary/10 text-foreground font-bold pl-2.5'
-              : 'border-l-2 border-transparent text-muted-foreground hover:text-foreground hover:bg-muted font-medium'"
+              ? 'bg-surface text-foreground font-semibold'
+              : 'text-foreground-muted hover:text-foreground hover:bg-surface/60 font-medium'"
             @click="activeTabIndex = index"
           >
-            {{ tabItem.name }}
+            {{ t(tabItem.name) }}
           </button>
         </nav>
       </div>
 
-      <!-- Content View -->
       <div class="flex flex-col flex-1 p-5 py-6">
         <div class="border-b border-border pb-3 mb-4">
-          <h1 class="text-foreground text-base font-bold uppercase tracking-[0.12em] font-serif">
-            {{ tabs[activeTabIndex].name }}
+          <h1 class="text-foreground text-sm font-semibold">
+            {{ t(tabs[activeTabIndex].name) }}
           </h1>
         </div>
         <div class="flex flex-col space-y-3 pr-4 pb-4 flex-auto h-0 overflow-y-auto">

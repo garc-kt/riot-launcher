@@ -18,7 +18,10 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '~': resolve(__dirname, './src')
+      '~': resolve(__dirname, './src'),
+      '@riot/contracts': resolve(__dirname, '../packages/contracts/src'),
+      '@riot/i18n': resolve(__dirname, '../packages/i18n/src'),
+      '@riot/ui': resolve(__dirname, '../packages/ui/src'),
     }
   },
 

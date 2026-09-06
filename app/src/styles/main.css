@@ -1,26 +1,91 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+ * No preflight, and no full "tailwindcss" import: this stylesheet is
+ * delivered into a shadow root (see app/src/main.ts) via adoptedStyleSheets,
+ * not injected into the League client own document — but preflight resets
+ * box-sizing/headings/buttons globally, which would be wrong even scoped to
+ * our own root since it fights the HUD deliberately minimal chrome.
+ * Importing only the theme and utilities layers keeps Tailwind utility
+ * classes without any of that reset.
+ */
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
+@import "@riot/ui/tokens.css";
 
-/* Custom companion styles */
 .companion-app-root {
+  font-family: var(--font-ui);
   color-scheme: dark;
+  color: var(--hud-foreground);
 }
 
-::-webkit-scrollbar {
+.companion-app-root ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
-::-webkit-scrollbar-track {
-  background: #010a13;
+.companion-app-root ::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #1e282d;
+.companion-app-root ::-webkit-scrollbar-thumb {
+  background: var(--hud-foreground-muted);
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #785a28;
+/*
+ * HUD material — translucent glass over the client UI. No card
+ * shadows, no gradients: the panel reads as an overlay, not a floating
+ * widget, so a hairline border and blur are what separate it from the
+ * client behind it.
+ */
+.hud-panel {
+  background: var(--hud-scrim);
+  border: 1px solid var(--hud-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.hud-btn {
+  color: var(--hud-foreground-muted);
+  border-radius: var(--radius-control);
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.hud-btn:hover {
+  color: var(--hud-foreground);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* A genuine primary CTA — flat inverted fill, matching the loader
+   .riot-btn-primary. Not the shared --signal color: that stays reserved
+   for the loader hook-armed state. */
+.hud-btn-primary {
+  background: var(--hud-foreground);
+  color: var(--background);
+  border-radius: var(--radius-control);
+  font-weight: 600;
+  transition: opacity 0.15s ease;
+}
+
+.hud-btn-primary:hover {
+  opacity: 0.85;
+}
+
+.hud-btn-primary:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.hud-tab {
+  color: var(--hud-foreground-muted);
+  border-radius: var(--radius-control);
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.hud-tab:hover {
+  color: var(--hud-foreground);
+}
+
+.hud-tab-active {
+  color: var(--hud-foreground);
+  background: rgba(255, 255, 255, 0.08);
 }

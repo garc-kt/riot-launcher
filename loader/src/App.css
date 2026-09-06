@@ -1,96 +1,5 @@
 @import "tailwindcss";
-
-@theme {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --radius-xl: 0.5rem;
-  --radius-lg: 0.375rem;
-  --radius-md: 0.25rem;
-  --radius-sm: 0.125rem;
-}
-
-:root, .theme-cosmic {
-  /* Authentic League of Legends Hextech Dark Client */
-  --background: #010a13;
-  --foreground: #f0e6d2;
-  --card: #091428;
-  --card-foreground: #f0e6d2;
-  --popover: #091428;
-  --popover-foreground: #f0e6d2;
-  --primary: #c8aa6e;
-  --primary-foreground: #010a13;
-  --secondary: #111e36;
-  --secondary-foreground: #f0e6d2;
-  --muted: rgba(200, 170, 110, 0.08);
-  --muted-foreground: #a09b8c;
-  --accent: #0ac8b9;
-  --accent-foreground: #010a13;
-  --destructive: #c83c3c;
-  --destructive-foreground: #f0e6d2;
-  --border: rgba(200, 170, 110, 0.28);
-  --border-active: #c8aa6e;
-  --border-teal: #0ac8b9;
-  --input: rgba(1, 10, 19, 0.85);
-  --ring: #c8aa6e;
-  
-  --hextech-gold: #c8aa6e;
-  --hextech-gold-bright: #f0e6d2;
-  --hextech-gold-dark: #785a28;
-  --hextech-teal: #0ac8b9;
-  --hextech-teal-bright: #cdfafa;
-  --hextech-blue: #005a82;
-  --hextech-navy: #091428;
-}
-
-.theme-vanilla {
-  /* Vanilla Prestige/Demacia Light Mode */
-  --background: #F1FEC8;
-  --foreground: #1e2328;
-  --card: #ffffff;
-  --card-foreground: #1e2328;
-  --popover: #ffffff;
-  --popover-foreground: #1e2328;
-  --primary: #785a28;
-  --primary-foreground: #F1FEC8;
-  --secondary: #e6f7b7;
-  --secondary-foreground: #1e2328;
-  --muted: rgba(120, 90, 40, 0.08);
-  --muted-foreground: #635f52;
-  --accent: #058097;
-  --accent-foreground: #ffffff;
-  --destructive: #dc2626;
-  --destructive-foreground: #ffffff;
-  --border: rgba(120, 90, 40, 0.25);
-  --border-active: #785a28;
-  --border-teal: #058097;
-  --input: rgba(255, 255, 255, 0.9);
-  --ring: #785a28;
-
-  --hextech-gold: #785a28;
-  --hextech-gold-bright: #3c2d0f;
-  --hextech-gold-dark: #a08246;
-  --hextech-teal: #007a8c;
-  --hextech-teal-bright: #009cb3;
-  --hextech-blue: #004b6e;
-  --hextech-navy: #f0f7db;
-}
+@import "@riot/ui/tokens.css";
 
 * {
   border-color: var(--border);
@@ -100,10 +9,10 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   user-select: none;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-feature-settings: "rlig" 1, "calt" 1;
-  letter-spacing: -0.01em;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  font-family: var(--font-ui);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+  letter-spacing: -0.005em;
+  transition: background-color 0.2s ease, color 0.2s ease;
   overflow: hidden;
 }
 
@@ -115,144 +24,107 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-body.theme-cosmic, .theme-cosmic {
-  background-color: #010a13;
-  background-image: 
-    radial-gradient(circle at 50% -15%, rgba(10, 200, 185, 0.12) 0%, transparent 65%),
-    radial-gradient(circle at 100% 100%, rgba(200, 170, 110, 0.07) 0%, transparent 50%),
-    linear-gradient(180deg, #091428 0%, #010a13 100%);
+.font-data {
+  font-family: var(--font-data);
+  font-feature-settings: "tnum";
 }
 
-body.theme-vanilla, .theme-vanilla {
-  background-color: #F1FEC8;
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.8) 0%, transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(200, 170, 110, 0.15) 0%, transparent 50%);
-}
-
-/* League of Legends Hextech Metal Framing & Accents */
+/*
+ * Panels are flush and near-sharp — a physical instrument bezel, not a
+ * floating card. No drop shadow by default; state is carried by the border,
+ * not a shadow bloom.
+ */
 .riot-card {
-  background-color: var(--card);
+  background-color: var(--surface);
   border: 1px solid var(--border);
-  box-shadow: inset 0 0 0 1px rgba(200, 170, 110, 0.08), 0 3px 10px rgba(0, 0, 0, 0.25);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-panel);
+  transition: border-color 0.15s ease;
 }
 
-.theme-cosmic .riot-card:hover {
-  border-color: rgba(200, 170, 110, 0.45);
-  box-shadow: inset 0 0 0 1px rgba(200, 170, 110, 0.15), 0 6px 16px rgba(0, 0, 0, 0.4);
+.riot-card:hover {
+  border-color: var(--border-strong);
 }
 
+/*
+ * The active state is a status strip on the left edge — like an indicator
+ * LED on real hardware — rather than a full glowing border. The signal
+ * color appears here because "enabled" is a real armed state, not decor.
+ */
 .riot-card-active {
-  border-color: var(--border-teal) !important;
-  box-shadow: inset 0 0 0 1px rgba(10, 200, 185, 0.2), 0 0 12px rgba(10, 200, 185, 0.15), 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  border-color: var(--border-strong);
+  position: relative;
 }
 
-.theme-vanilla .riot-card-active {
-  border-color: var(--border-teal) !important;
-  box-shadow: inset 0 0 0 1px rgba(0, 122, 140, 0.2), 0 0 10px rgba(0, 122, 140, 0.15) !important;
+.riot-card-active::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+  background: var(--signal);
 }
 
-/* Primary League Metallic Button */
+/*
+ * Primary action — a flat, inverted (foreground-on-background) fill. This
+ * is the ordinary strong CTA; it is deliberately NOT the signal color,
+ * which stays reserved for the hook-armed state (see Activator.vue) and
+ * an enabled plugin own status (see .riot-card-active below).
+ */
 .riot-btn-primary {
-  background: linear-gradient(180deg, #1e282d 0%, #1e2328 100%);
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  box-shadow: inset 0 0 4px rgba(200, 170, 110, 0.2), 0 2px 6px rgba(0, 0, 0, 0.3);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
+  background: var(--foreground);
+  border: 1px solid var(--foreground);
+  color: var(--background);
+  border-radius: var(--radius-control);
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: opacity 0.15s ease;
 }
 
 .riot-btn-primary:hover {
-  background: linear-gradient(180deg, #2d3b43 0%, #252b31 100%);
-  border-color: var(--hextech-gold-bright);
-  color: var(--hextech-gold-bright);
-  box-shadow: inset 0 0 8px rgba(240, 230, 210, 0.3), 0 0 12px rgba(200, 170, 110, 0.35);
+  opacity: 0.85;
 }
 
-.theme-vanilla .riot-btn-primary {
-  background: linear-gradient(180deg, #f0ecd9 0%, #e2dcbe 100%);
-  border: 1px solid #785a28;
-  color: #3c2d0f;
-  box-shadow: inset 0 0 3px rgba(120, 90, 40, 0.2), 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.theme-vanilla .riot-btn-primary:hover {
-  background: linear-gradient(180deg, #ffffff 0%, #f0ecd9 100%);
-  border-color: #3c2d0f;
-  color: #1e2328;
-  box-shadow: 0 0 10px rgba(120, 90, 40, 0.3);
-}
-
-/* Hextech Magic Cyan Button */
-.riot-btn-magic {
-  background: linear-gradient(180deg, #058097 0%, #034b5b 100%);
-  border: 1px solid #0ac8b9;
-  color: #ffffff;
-  box-shadow: inset 0 0 6px rgba(10, 200, 185, 0.4), 0 2px 8px rgba(10, 200, 185, 0.3);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.riot-btn-magic:hover {
-  background: linear-gradient(180deg, #089eb9 0%, #046378 100%);
-  border-color: #cdfafa;
-  box-shadow: inset 0 0 10px rgba(10, 200, 185, 0.6), 0 0 16px rgba(10, 200, 185, 0.5);
-}
-
-/* Secondary Button */
 .riot-btn-secondary {
-  background: var(--card);
+  background: transparent;
   border: 1px solid var(--border);
+  border-radius: var(--radius-control);
   color: var(--foreground);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .riot-btn-secondary:hover {
-  background: var(--muted);
-  border-color: var(--border-active);
-  color: var(--hextech-gold-bright);
+  background: var(--surface-2);
+  border-color: var(--border-strong);
 }
 
-/* Hextech Input Bar */
 .riot-input {
-  background-color: var(--input);
+  background-color: var(--surface);
   border: 1px solid var(--border);
+  border-radius: var(--radius-control);
   color: var(--foreground);
-  transition: all 0.2s ease;
   outline: none;
+  transition: border-color 0.15s ease;
 }
 
 .riot-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 8px rgba(10, 200, 185, 0.3);
+  border-color: var(--signal);
 }
 
-/* LoL Ability Keycap */
+/* Keyboard key — always set in the data face; a key code is machine data. */
 .riot-kbd {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.15rem 0.45rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  padding: 0.15rem 0.4rem;
+  font-family: var(--font-data);
   font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--foreground);
-  background: var(--card);
+  font-weight: 600;
+  color: var(--foreground-muted);
+  background: var(--surface-2);
   border: 1px solid var(--border);
-  border-radius: 0.25rem;
-  box-shadow: inset 0 -1px 0 rgba(200, 170, 110, 0.2), 0 1px 2px rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-control);
 }
 
-/* Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -263,11 +135,11 @@ body.theme-vanilla, .theme-vanilla {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--muted-foreground);
-  opacity: 0.3;
+  background: var(--foreground-subtle);
+  opacity: 0.4;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  opacity: 0.6;
+  opacity: 0.7;
 }

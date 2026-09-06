@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test'
 import assert from 'node:assert/strict'
-import { createLifecycleManager } from '../app/src/services/lifecycle.ts'
+import { createLifecycleManager } from '../packages/contracts/src/lifecycle.ts'
 
 describe('Passive During Matches Rule (§0 & §4.5)', () => {
   test('entering InProgress phase triggers unmount and ceases activity', () => {

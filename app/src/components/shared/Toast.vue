@@ -22,12 +22,8 @@ defineExpose({ show })
 <template>
   <div
     v-if="visible"
-    :class="[
-      'cp-fixed cp-bottom-4 cp-left-1/2 cp-z-[100000] -cp-translate-x-1/2 cp-rounded-md cp-px-4 cp-py-2 cp-text-sm cp-font-medium cp-shadow-lg cp-transition-all',
-      type === 'success' ? 'cp-bg-emerald-800 cp-text-emerald-100' :
-      type === 'error' ? 'cp-bg-rose-900 cp-text-rose-100' :
-      'cp-bg-[#0e1e2d] cp-text-[#f0e6d2] cp-border cp-border-[#785a28]'
-    ]"
+    class="hud-panel fixed bottom-4 left-1/2 z-[100000] -translate-x-1/2 rounded-md px-4 py-2 text-[12px] font-medium"
+    :class="type === 'error' ? 'border-destructive/50 text-destructive' : ''"
   >
     {{ message }}
   </div>

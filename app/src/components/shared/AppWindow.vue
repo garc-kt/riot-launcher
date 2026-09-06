@@ -20,40 +20,29 @@ const toggleMinimize = () => {
 
 <template>
   <div
-    class="cp-fixed cp-bottom-6 cp-right-6 cp-z-[99999] cp-flex cp-flex-col cp-overflow-hidden cp-rounded-lg cp-border cp-border-[#785a28] cp-bg-[#010a13] cp-text-[#cdbe91] cp-shadow-2xl"
-    :style="{ width: isMinimized ? '320px' : '640px', height: isMinimized ? 'auto' : '520px' }"
+    class="hud-panel fixed bottom-6 right-6 z-[99999] flex flex-col overflow-hidden rounded-lg"
+    :style="{ width: isMinimized ? '300px' : '620px', height: isMinimized ? 'auto' : '500px' }"
   >
-    <!-- Window Header -->
-    <header class="cp-flex cp-items-center cp-justify-between cp-border-b cp-border-[#1e282d] cp-bg-[#091428] cp-px-4 cp-py-2.5 cp-select-none">
-      <div class="cp-flex cp-items-center cp-gap-2">
-        <Sparkles class="cp-h-4 cp-w-4 cp-text-[#c89b3c]" />
-        <span class="cp-text-sm cp-font-semibold cp-tracking-wide cp-text-[#f0e6d2]">
-          {{ title || 'LoL Companion' }}
+    <header class="flex items-center justify-between border-b border-[var(--hud-border)] px-4 py-2.5 select-none">
+      <div class="flex items-center gap-2">
+        <Sparkles class="h-4 w-4 text-[var(--hud-foreground-muted)]" />
+        <span class="text-[13px] font-semibold">
+          {{ title || 'Companion' }}
         </span>
       </div>
-      <div class="cp-flex cp-items-center cp-gap-1">
-        <button
-          @click="toggleMinimize"
-          class="cp-rounded cp-p-1 cp-text-[#a09b8c] hover:cp-bg-[#1e282d] hover:cp-text-[#f0e6d2]"
-          title="Minimize"
-        >
-          <Minus class="cp-h-3.5 cp-w-3.5" />
+      <div class="flex items-center gap-1">
+        <button class="hud-btn p-1" title="Minimize" @click="toggleMinimize">
+          <Minus class="h-3.5 w-3.5" />
         </button>
-        <button
-          @click="emit('close')"
-          class="cp-rounded cp-p-1 cp-text-[#a09b8c] hover:cp-bg-red-900/50 hover:cp-text-red-300"
-          title="Close"
-        >
-          <X class="cp-h-3.5 cp-w-3.5" />
+        <button class="hud-btn p-1 hover:text-destructive" title="Close" @click="emit('close')">
+          <X class="h-3.5 w-3.5" />
         </button>
       </div>
     </header>
 
-    <!-- Tab Bar -->
     <TabBar v-if="!isMinimized" />
 
-    <!-- Main Content Area -->
-    <main v-if="!isMinimized" class="cp-flex-1 cp-overflow-y-auto cp-p-4 cp-bg-[#010a13]/95">
+    <main v-if="!isMinimized" class="flex-1 overflow-y-auto p-4">
       <slot />
     </main>
   </div>

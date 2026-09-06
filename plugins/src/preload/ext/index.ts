@@ -1,5 +1,12 @@
 import { themeEngine } from '../theming/index.ts';
 import { native } from '../api/native.ts';
+import { emberHook, type EmberHookApi, type EmberRule, EmberHookManager } from './ember.ts';
+import { netHook, type NetHookApi, type Pattern, NetHookManager } from './net.ts';
+import { isPreloadExtDisabled } from './safety.ts';
+
+export { emberHook, EmberHookManager, type EmberHookApi, type EmberRule };
+export { netHook, NetHookManager, type NetHookApi, type Pattern };
+export { isPreloadExtDisabled };
 
 export interface ScopedStore {
   get<T = any>(key: string, defaultValue?: T): T | undefined;
@@ -15,6 +22,15 @@ export interface ScopedFs {
   writeText(relativePath: string, content: string): Promise<void>;
   exists(relativePath: string): Promise<boolean>;
   list(relativeDir?: string): Promise<string[]>;
+}
+
+export interface ScopedAssets {
+  read(relativePath: string): Promise<string>;
+  exists(relativePath: string): Promise<boolean>;
+}
+
+function sanitizeRelativePath(relPath: string): string {
+  return relPath.replace(/^(\.\.[\/\\])+/, '').replace(/^\/+/, '');
 }
 
 export interface CommandDefinition {
@@ -96,11 +112,22 @@ export function createScopedStore(pluginName: string): ScopedStore {
       }
     }
 
-    // 2. Fallback: In-memory or prefixed global DataStore without re-serialize
-    if (typeof window !== 'undefined' && window.DataStore) {
-      const prefix = `plugin:${pluginName}:`;
-      // Check if global DataStore already holds any keys for this plugin
-      // We don't re-serialize global store here
+    // 2. Fallback: read back whatever scheduleSave() last wrote to
+    // localStorage. This mirrors the write-side fallback below — without
+    // this read, any data written here when native.SavePluginStore was
+    // unavailable would be silently lost on the next load.
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const raw = localStorage.getItem(`companion_store:${pluginName}`);
+        if (raw) {
+          const obj = JSON.parse(raw);
+          for (const [k, v] of Object.entries(obj)) {
+            cache.set(k, v);
+          }
+        }
+      } catch (err) {
+        console.warn(`Failed to parse localStorage fallback for plugin ${pluginName}:`, err);
+      }
     }
 
     return cache;
@@ -165,17 +192,21 @@ export function createScopedStore(pluginName: string): ScopedStore {
   };
 }
 
-// Create a scoped file system per plugin
+// Create a scoped, WRITABLE data store per plugin — rooted at
+// `plugins_data/<name>/` via the native bridge. This is where a plugin
+// keeps its own files (caches, exports, generated data). It intentionally
+// has no CEF-scheme fallback: `https://companion/<name>/` resolves to
+// `plugins_dir()/<name>/`, a *different* directory than `plugins_data/`,
+// and silently reading/writing the wrong root is worse than failing over
+// to the in-memory fallback below. Read-only access to the plugin's own
+// bundled files (the directory `https://companion/` actually serves) is
+// `createScopedAssets` instead.
 export function createScopedFs(pluginName: string): ScopedFs {
-  const sanitize = (relPath: string) => {
-    return relPath.replace(/^(\.\.[\/\\])+/, '').replace(/^\/+/, '');
-  };
-
   const virtualFs = new Map<string, string>();
 
   return {
     async readText(relativePath: string): Promise<string> {
-      const clean = sanitize(relativePath);
+      const clean = sanitizeRelativePath(relativePath);
 
       // 1. Try native ReadPluginFile
       if (typeof native !== 'undefined' && typeof native.ReadPluginFile === 'function') {
@@ -185,21 +216,15 @@ export function createScopedFs(pluginName: string): ScopedFs {
         }
       }
 
-      // 2. Check virtual in-memory fallback
+      // 2. In-memory fallback (e.g. native bridge unavailable outside the client)
       if (virtualFs.has(clean)) {
         return virtualFs.get(clean)!;
       }
 
-      // 3. Fallback to CEF scheme
-      const url = `https://companion/${pluginName}/${clean}`;
-      const res = await fetch(url);
-      if (!res.ok) {
-        throw new Error(`Failed to read file ${relativePath}: HTTP ${res.status}`);
-      }
-      return await res.text();
+      throw new Error(`File not found in plugin data store: ${relativePath}`);
     },
     async writeText(relativePath: string, content: string): Promise<void> {
-      const clean = sanitize(relativePath);
+      const clean = sanitizeRelativePath(relativePath);
       virtualFs.set(clean, content);
 
       // Try native WritePluginFile
@@ -213,23 +238,17 @@ export function createScopedFs(pluginName: string): ScopedFs {
       }
     },
     async exists(relativePath: string): Promise<boolean> {
-      const clean = sanitize(relativePath);
+      const clean = sanitizeRelativePath(relativePath);
       if (virtualFs.has(clean)) return true;
 
       if (typeof native !== 'undefined' && typeof native.PluginFileExists === 'function') {
         return Boolean(native.PluginFileExists(pluginName, clean));
       }
 
-      try {
-        const url = `https://companion/${pluginName}/${clean}`;
-        const res = await fetch(url, { method: 'HEAD' });
-        return res.ok;
-      } catch {
-        return false;
-      }
+      return false;
     },
     async list(relativeDir = ''): Promise<string[]> {
-      const cleanDir = sanitize(relativeDir);
+      const cleanDir = sanitizeRelativePath(relativeDir);
       if (typeof native !== 'undefined' && typeof native.ListPluginFiles === 'function') {
         const files = native.ListPluginFiles(pluginName, cleanDir);
         if (Array.isArray(files)) return files;
@@ -241,11 +260,43 @@ export function createScopedFs(pluginName: string): ScopedFs {
   };
 }
 
+// Read-only access to the plugin's own bundled/installed files — served
+// over the CEF `https://companion/<name>/` scheme, which the C++ core maps
+// to `plugins_dir()/<name>/` (assets.cc). This is the directory a plugin
+// actually ships in (locales, static data), distinct from its writable
+// `plugins_data/<name>/` store above.
+export function createScopedAssets(pluginName: string): ScopedAssets {
+  return {
+    async read(relativePath: string): Promise<string> {
+      const clean = sanitizeRelativePath(relativePath);
+      const url = `https://companion/${pluginName}/${clean}`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`Failed to read asset ${relativePath}: HTTP ${res.status}`);
+      }
+      return await res.text();
+    },
+    async exists(relativePath: string): Promise<boolean> {
+      const clean = sanitizeRelativePath(relativePath);
+      try {
+        const url = `https://companion/${pluginName}/${clean}`;
+        const res = await fetch(url, { method: 'HEAD' });
+        return res.ok;
+      } catch {
+        return false;
+      }
+    },
+  };
+}
+
 export function createPluginExtensions(pluginName = 'anonymous') {
   return {
     store: createScopedStore(pluginName),
     fs: createScopedFs(pluginName),
+    assets: createScopedAssets(pluginName),
     commands,
     theme: themeEngine,
+    ember: emberHook,
+    net: netHook,
   };
 }

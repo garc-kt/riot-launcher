@@ -30,4 +30,13 @@ export const Shell = {
             await shell.open(url)
         }
     },
+
+    /**
+     * Is LeagueClientUx.exe currently running? Both the loader and the
+     * injected client write `datastore` with no locking — callers should
+     * refuse to write it while this is true rather than race the client.
+     */
+    async isLeagueClientRunning(): Promise<boolean> {
+        return await invoke<boolean>('plugin:shell|is_league_client_running')
+    },
 }

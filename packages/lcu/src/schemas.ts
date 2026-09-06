@@ -65,3 +65,17 @@ export const GameflowPhaseSchema = z.enum([
   'EndOfGame',
   'TerminatedInError',
 ])
+
+// Validates an SGP match-history-query SUMMARY response body — everything
+// on it is optional/defaulted because SGP is an undocumented, volatile
+// endpoint (see plan.md §6.1); a shape change should degrade gracefully,
+// not throw.
+export const SgpSummarySchema = z.object({
+  puuid: z.string(),
+  alias: z.string().optional(),
+  rankedTier: z.string().optional(),
+  rankedDivision: z.string().optional(),
+  leaguePoints: z.number().optional(),
+  wins: z.number().default(0),
+  losses: z.number().default(0),
+})

@@ -340,10 +340,11 @@ namespace config
         bool optimized_client();
         bool silent_mode();
         bool super_potato();
-        bool isecure_mode();
+        bool insecure_mode();
         bool use_devtools();
         bool use_riotclient();
         bool use_proxy();
+        bool no_preload_ext();
 
         // undocumented
         int debug_port();

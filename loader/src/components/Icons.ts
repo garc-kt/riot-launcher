@@ -30,13 +30,6 @@ function createSvg(innerPaths: Array<{ tag: string; attrs: Record<string, any> }
   }
 }
 
-export const HomeIcon = createSvg([
-  { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
-  { tag: 'path', attrs: { d: 'M5 12l-2 0l9 -9l9 9l-2 0' } },
-  { tag: 'path', attrs: { d: 'M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7' } },
-  { tag: 'path', attrs: { d: 'M10 12h4v4h-4z' } },
-])
-
 export const SearchIcon = createSvg([
   { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
   { tag: 'path', attrs: { d: 'M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0' } },
@@ -56,14 +49,6 @@ export const PluginIcon = createSvg([
   { tag: 'path', attrs: { d: 'M20 9l-3.5 3.5' } },
 ])
 
-export const PaletteIcon = createSvg([
-  { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
-  { tag: 'path', attrs: { d: 'M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -.5 1.25a2 2 0 0 1 -1.5 .5z' } },
-  { tag: 'path', attrs: { d: 'M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0' } },
-  { tag: 'path', attrs: { d: 'M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0' } },
-  { tag: 'path', attrs: { d: 'M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0' } },
-])
-
 export const SunIcon = createSvg([
   { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
   { tag: 'path', attrs: { d: 'M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0' } },
@@ -73,12 +58,6 @@ export const SunIcon = createSvg([
 export const MoonIcon = createSvg([
   { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
   { tag: 'path', attrs: { d: 'M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z' } },
-])
-
-export const StoreIcon = createSvg([
-  { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
-  { tag: 'path', attrs: { d: 'M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z' } },
-  { tag: 'path', attrs: { d: 'M9 8a3 3 0 0 0 6 0' } },
 ])
 
 export const SettingsIcon = createSvg([
@@ -93,29 +72,10 @@ export const ReloadIcon = createSvg([
   { tag: 'path', attrs: { d: 'M20 4v5h-5' } },
 ])
 
-export const WhirlIcon = createSvg([
-  { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
-  { tag: 'path', attrs: { d: 'M14 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z' } },
-  { tag: 'path', attrs: { d: 'M12 21c-3.314 0 -6 -2.462 -6 -5.5s2.686 -5.5 6 -5.5' } },
-  { tag: 'path', attrs: { d: 'M21 12c0 3.314 -2.462 6 -5.5 6s-5.5 -2.686 -5.5 -6' } },
-  { tag: 'path', attrs: { d: 'M12 14c3.314 0 6 -2.462 6 -5.5s-2.686 -5.5 -6 -5.5' } },
-  { tag: 'path', attrs: { d: 'M14 12c0 -3.314 -2.462 -6 -5.5 -6s-5.5 2.686 -5.5 6' } },
-])
-
 export const PowerIcon = createSvg([
   { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
   { tag: 'path', attrs: { d: 'M7 6a7.75 7.75 0 1 0 10 0' } },
   { tag: 'path', attrs: { d: 'M12 4l0 8' } },
-])
-
-export const RechargingIcon = createSvg([
-  { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
-  { tag: 'path', attrs: { d: 'M10 20.777a8.942 8.942 0 0 1 -2.48 -.969' } },
-  { tag: 'path', attrs: { d: 'M14 3.223a9.003 9.003 0 0 1 0 17.554' } },
-  { tag: 'path', attrs: { d: 'M4.579 17.093a8.961 8.961 0 0 1 -1.227 -2.592' } },
-  { tag: 'path', attrs: { d: 'M3.124 10.5c.16 -.95 .468 -1.85 .9 -2.675l.169 -.305' } },
-  { tag: 'path', attrs: { d: 'M6.907 4.579a8.954 8.954 0 0 1 3.093 -1.356' } },
-  { tag: 'path', attrs: { d: 'M12 9l-2 3h4l-2 3' } },
 ])
 
 export const BoltIcon = createSvg([
@@ -141,29 +101,6 @@ export const LinkIcon = createSvg([
   { tag: 'path', attrs: { d: 'M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464' } },
   { tag: 'path', attrs: { d: 'M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463' } },
 ])
-
-export const DiscordIcon: FunctionalComponent<IconProps> = (props) => {
-  const size = props.size ?? 24
-  return h(
-    'svg',
-    {
-      class: props.class,
-      xmlns: 'http://www.w3.org/2000/svg',
-      width: size,
-      height: size,
-      viewBox: '0 0 24 24',
-      fill: 'none',
-      stroke: 'currentColor',
-    },
-    [
-      h('path', {
-        fill: 'currentColor',
-        stroke: 'none',
-        d: 'M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z'
-      })
-    ]
-  )
-}
 
 export const GitHubIcon: FunctionalComponent<IconProps> = (props) => {
   const size = props.size ?? 24

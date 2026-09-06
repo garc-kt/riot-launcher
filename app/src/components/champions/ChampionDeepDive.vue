@@ -53,38 +53,38 @@ const filteredChampions = () => {
 </script>
 
 <template>
-  <div class="cp-space-y-4">
+  <div class="space-y-4">
     <!-- Search -->
-    <div class="cp-relative">
-      <Search class="cp-absolute cp-left-3 cp-top-1/2 cp-h-4 cp-w-4 -cp-translate-y-1/2 cp-text-[#a09b8c]" />
+    <div class="relative">
+      <Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--hud-foreground-muted)]" />
       <input
         v-model="query"
         type="text"
         placeholder="Filter champions..."
-        class="cp-w-full cp-rounded cp-border cp-border-[#1e282d] cp-bg-[#091428] cp-py-2 cp-pl-9 cp-pr-3 cp-text-sm cp-text-[#f0e6d2] placeholder:cp-text-[#a09b8c] focus:cp-border-[#c89b3c] focus:cp-outline-none"
+        class="w-full rounded border border-[var(--hud-border)] bg-[rgba(255,255,255,0.04)] py-2 pl-9 pr-3 text-sm text-[var(--hud-foreground)] placeholder:text-[var(--hud-foreground-muted)] focus:border-[var(--hud-foreground-muted)] focus:outline-none"
       />
     </div>
 
     <!-- Champion Selector Badges -->
-    <div class="cp-flex cp-gap-2 cp-overflow-x-auto cp-pb-1">
+    <div class="flex gap-2 overflow-x-auto pb-1">
       <button
         v-for="champ in filteredChampions()"
         :key="champ.id"
         @click="selectedChampion = champ"
         :class="[
-          'cp-flex cp-items-center cp-gap-2 cp-rounded cp-border cp-px-3 cp-py-1.5 cp-text-xs cp-font-semibold cp-transition-colors',
+          'flex items-center gap-2 rounded border px-3 py-1.5 text-xs font-semibold transition-colors',
           selectedChampion.id === champ.id
-            ? 'cp-border-[#c89b3c] cp-bg-[#1e282d] cp-text-[#f0e6d2]'
-            : 'cp-border-[#1e282d] cp-bg-[#091428] cp-text-[#a09b8c] hover:cp-text-[#cdbe91]'
+            ? 'border-[var(--hud-foreground-muted)] bg-[var(--hud-border)] text-[var(--hud-foreground)]'
+            : 'border-[var(--hud-border)] bg-[rgba(255,255,255,0.04)] text-[var(--hud-foreground-muted)] hover:text-[var(--hud-foreground)]'
         ]"
       >
         <span>{{ champ.name }}</span>
-        <span class="cp-text-[10px] cp-text-[#0ac8b9]">{{ champ.winRate }}%</span>
+        <span class="text-[10px] text-[var(--hud-foreground-muted)]">{{ champ.winRate }}%</span>
       </button>
     </div>
 
     <!-- Selected Champion Overview -->
-    <div class="cp-grid cp-grid-cols-1 md:cp-grid-cols-2 cp-gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <ChampionTooltip :champion="selectedChampion" />
       <BuildSuggestions :championName="selectedChampion.name" />
     </div>

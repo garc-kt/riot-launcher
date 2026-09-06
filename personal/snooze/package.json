@@ -1,0 +1,14 @@
+{
+  "name": "@personal/snooze",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "dependencies": {
+    "@riot/contracts": "workspace:*",
+    "@riot/lcu": "workspace:*"
+  }
+}

@@ -7,7 +7,7 @@ export const Startup = new class {
   }
 
   async setEnable(enable: boolean) {
-    await invoke<boolean>('plugin:startup|set_enable', {
+    return await invoke<boolean>('plugin:startup|set_enable', {
       enable: enable
     })
   }

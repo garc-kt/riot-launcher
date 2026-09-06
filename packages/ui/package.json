@@ -1,0 +1,17 @@
+{
+  "name": "@riot/ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens.css": "./src/tokens.css",
+    "./SettingsSchemaRenderer.vue": "./src/SettingsSchemaRenderer.vue"
+  },
+  "dependencies": {
+    "@riot/contracts": "workspace:*"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.38"
+  }
+}

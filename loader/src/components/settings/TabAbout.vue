@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { shell } from '@tauri-apps/api'
 import { GitHubIcon, LinkIcon } from '../Icons'
+import { useI18n } from '../../lib/i18n'
+
+const { t } = useI18n()
 
 const links = {
   riotRepo: 'https://github.com/garc-kt/riot-launcher',
@@ -16,51 +19,51 @@ const openUrl = (url: string) => {
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div class="riot-card p-4 rounded-lg flex flex-col space-y-2.5">
+  <div class="space-y-4">
+    <div class="riot-card p-4 flex flex-col space-y-2.5">
       <div class="flex items-center justify-between">
-        <h3 class="text-base font-bold text-foreground font-serif uppercase tracking-wider">
+        <h3 class="text-sm font-semibold text-foreground">
           Riot Loader
         </h3>
-        <span class="text-[10px] px-2 py-0.5 rounded border border-border bg-muted text-muted-foreground font-mono font-bold">
+        <span class="text-[10px] px-1.5 py-0.5 rounded-sm border border-border bg-surface-2 text-foreground-subtle font-data font-semibold">
           v{{ appVersion }}
         </span>
       </div>
-      <p class="text-xs text-muted-foreground leading-relaxed">
-        High-performance standalone Win32 League of Legends client companion platform with native constructable theming, runtime extensions, and match safety controls.
+      <p class="text-xs text-foreground-muted leading-relaxed">
+        {{ t('Standalone Win32 League of Legends client companion platform with native constructable theming, runtime extensions, and match safety controls.') }}
       </p>
       <div class="pt-2">
         <button
-          class="riot-btn-primary inline-flex items-center gap-2 px-3.5 py-1.5 rounded text-xs"
+          class="riot-btn-primary inline-flex items-center gap-2 px-3.5 py-1.5 text-xs"
           @click="openUrl(links.riotRepo)"
         >
           <GitHubIcon :size="15" />
-          <span>GitHub Repository</span>
+          <span>{{ t('GitHub repository') }}</span>
         </button>
       </div>
     </div>
 
-    <div class="riot-card p-4 rounded-lg space-y-3">
-      <h4 class="text-xs font-bold uppercase tracking-[0.14em] text-foreground font-serif">
-        Attribution & Upstream
+    <div class="riot-card p-4 space-y-3">
+      <h4 class="text-xs font-semibold text-foreground">
+        {{ t('Attribution & upstream') }}
       </h4>
-      <p class="text-xs text-muted-foreground leading-relaxed">
-        Riot Loader is an enhanced fork of <span class="text-foreground font-semibold">Pengu Loader</span> (Copyright © 2024 Pengu Loader), licensed under the MIT License.
+      <p class="text-xs text-foreground-muted leading-relaxed">
+        {{ t('Riot Loader is an enhanced fork of Pengu Loader (Copyright © 2024 Pengu Loader), licensed under the MIT License.') }}
       </p>
       <div class="flex items-center space-x-3 pt-1">
         <button
-          class="riot-btn-secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold"
+          class="riot-btn-secondary inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium"
           @click="openUrl(links.penguHome)"
         >
           <LinkIcon :size="14" />
           <span>pengu.lol</span>
         </button>
         <button
-          class="riot-btn-secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold"
+          class="riot-btn-secondary inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium"
           @click="openUrl(links.penguRepo)"
         >
           <GitHubIcon :size="14" />
-          <span>Upstream Source</span>
+          <span>{{ t('Upstream source') }}</span>
         </button>
       </div>
     </div>

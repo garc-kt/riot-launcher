@@ -16,6 +16,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "paths": {
+      "@riot/contracts": ["../packages/contracts/src/index.ts"],
+      "@riot/contracts/*": ["../packages/contracts/src/*"]
+    },
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     /* Linting */

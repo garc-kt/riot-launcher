@@ -32,7 +32,11 @@ if ('disabledPlugins' in window.Pengu) {
 
   for (let i = plugins.length - 1; i >= 0; --i) {
     const entry = plugins[i]
-    if (isDisabled(entry) || /^@default\//i.test(entry)) {
+    // @default/ is the built-in SolidJS views bundle (loaded separately,
+    // see views/index.tsx). @companion/ is the first-party companion app —
+    // excluded here so it can never be hash-disabled from the plugin
+    // gallery like a third-party plugin; it's loaded unconditionally below.
+    if (isDisabled(entry) || /^@default\//i.test(entry) || /^@companion\//i.test(entry)) {
       plugins.splice(i, 1)
     }
   }
@@ -81,10 +85,14 @@ async function loadPlugin(entry: string) {
   }
 }
 
-// Load all plugins asynchronously
-const waitable = Promise.all(
-  plugins.map(loadPlugin)
-);
+// Load all user plugins, plus the first-party companion app. The companion
+// is loaded directly rather than through the user plugin list above — it
+// isn't something a user should be able to disable by hash collision the
+// way third-party plugins can, and it ships at a fixed, reserved path.
+const waitable = Promise.all([
+  ...plugins.map(loadPlugin),
+  loadPlugin('@companion/index.js'),
+]);
 
 // Listen for the first rcp, it's also the first listener
 rcp.preInit('rcp-fe-common-libs', async function () {

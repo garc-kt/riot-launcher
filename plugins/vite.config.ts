@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import { readFileSync } from 'node:fs';
 import { defineConfig } from 'vite';
 import { build } from 'esbuild';
 
@@ -12,6 +13,11 @@ import viteRestart from 'vite-plugin-restart';
 const port = 3001;
 const root = (...args: string[]) => path.join(__dirname, ...args);
 
+// Single source of truth for the app version: the workspace root package.json.
+// `window.Pengu.version` must match the loader/Cargo/tauri.conf version so the
+// in-client updater compares against the version that actually ships.
+const rootPkg = JSON.parse(readFileSync(root('..', 'package.json'), 'utf-8'));
+
 export default defineConfig(({ command, mode }) => {
 
   const dev = command === 'serve'
@@ -19,6 +25,14 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     publicDir: false,
+    resolve: {
+      alias: {
+        '@riot/contracts': root('..', 'packages', 'contracts', 'src'),
+      },
+    },
+    define: {
+      __APP_VERSION__: JSON.stringify(rootPkg.version)
+    },
     server: {
       https: true,
       port: port

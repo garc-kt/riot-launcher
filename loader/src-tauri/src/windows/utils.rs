@@ -117,6 +117,11 @@ pub fn is_webview2_installed() -> bool {
 }
 
 /// Detect existing upstream PenguLoader installation to prevent conflict (§9.1)
+///
+/// SOURCE OF TRUTH — this is what ships. `packages/contracts/src/conflict.ts`
+/// is a test-only mirror of these exact conditions for `tests/coexistence.test.mjs`.
+/// Any change here (directory list, IFEO substring checks, proxy-DLL
+/// comparison) MUST be mirrored there in the same commit.
 pub fn detect_upstream_conflict() -> Option<String> {
     let check_dirs = [
         std::env::var("ProgramFiles").unwrap_or_else(|_| "C:\\Program Files".to_string()),

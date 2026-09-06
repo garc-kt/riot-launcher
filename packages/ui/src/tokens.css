@@ -1,0 +1,160 @@
+/*
+ * Instrument & HUD — shared design tokens for the loader (an instrument: its
+ * only job is to report and flip one bit, hook armed or not) and the
+ * companion (a HUD: it sits over the League client UI, which already
+ * supplies color via champion art, so the overlay itself stays near-zero
+ * chroma and lets type and spacing carry identity instead).
+ *
+ * The idle palette is fully achromatic on purpose. --signal is the ONE
+ * high-chroma color in the whole system, reserved for the armed/live state
+ * and nothing else — a state change in the chrome itself, not a decoration.
+ *
+ * Tokens are declared once, under their real (bare) names — --border,
+ * --surface, --hud-scrim, etc. — which is what every hand-written .riot-* /
+ * .hud-* class and every Tailwind arbitrary-value reference (bg-[var(--x)])
+ * across both apps actually uses. @theme below only maps a SUBSET of these
+ * to Tailwind --color-* utility namespace, for the plain utility classes
+ * (bg-signal, text-foreground-muted, …) — it does not replace the bare
+ * names, which must keep resolving on their own.
+ */
+
+@theme {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-subtle: var(--foreground-subtle);
+  --color-signal: var(--signal);
+  --color-signal-bright: var(--signal-bright);
+  --color-signal-foreground: var(--signal-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --radius-panel: 0.125rem;
+  --radius-control: 0.25rem;
+  --radius-pill: 999px;
+
+  --font-ui: "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  --font-data: "Cascadia Code", "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+
+:root, .theme-dark {
+  --background: #0c0e11;
+  --surface: #15181c;
+  --surface-2: #1b1f24;
+  --border: #262b31;
+  --border-strong: #383f47;
+  --foreground: #e9ebee;
+  --foreground-muted: #9099a3;
+  --foreground-subtle: #5c6570;
+
+  --signal: #e8973c;
+  --signal-bright: #ffb662;
+  --signal-dim: #4a341a;
+  --signal-foreground: #16110a;
+
+  --destructive: #d1453d;
+  --destructive-foreground: #f5efed;
+
+  /* Companion HUD material — translucent glass over the client UI */
+  --hud-scrim: rgba(10, 12, 14, 0.72);
+  --hud-border: rgba(255, 255, 255, 0.08);
+  --hud-foreground: #eef0f2;
+  --hud-foreground-muted: rgba(238, 240, 242, 0.62);
+}
+
+.theme-light {
+  --background: #f4f5f6;
+  --surface: #ffffff;
+  --surface-2: #eceef0;
+  --border: #dcdfe3;
+  --border-strong: #c3c8ce;
+  --foreground: #14171a;
+  --foreground-muted: #565d66;
+  --foreground-subtle: #8a9099;
+
+  --signal: #b5691c;
+  --signal-bright: #d97e22;
+  --signal-dim: #ecd9bf;
+  --signal-foreground: #fffaf3;
+
+  --destructive: #b23730;
+  --destructive-foreground: #fff6f5;
+
+  --hud-scrim: rgba(255, 255, 255, 0.78);
+  --hud-border: rgba(20, 23, 26, 0.1);
+  --hud-foreground: #14171a;
+  --hud-foreground-muted: rgba(20, 23, 26, 0.6);
+}
+
+/*
+ * SettingsSchemaRenderer.vue — shared here (not a scoped <style> block in
+ * the component) because Vue SFC scoped styles get extracted to a
+ * separate CSS asset by Vite even in lib mode, which the companion
+ * build has no mechanism to load (see plan.md Phase 3 / bug #9): its CSS
+ * only ships via the shadow-root adoptedStyleSheets path in main.ts,
+ * which only covers this file.
+ */
+.ssr-root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.ssr-row + .ssr-row {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+.ssr-label-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+.ssr-label-text {
+  display: flex;
+  flex-direction: column;
+}
+.ssr-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+.ssr-description {
+  font-size: 0.6875rem;
+  color: var(--foreground-muted);
+  margin-top: 0.125rem;
+  line-height: 1.4;
+}
+.ssr-info {
+  font-size: 0.6875rem;
+  color: var(--foreground-muted);
+  font-style: italic;
+}
+.ssr-checkbox {
+  margin-top: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+.ssr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.ssr-input {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  border-radius: var(--radius-control);
+  padding: 0.375rem 0.5rem;
+  font-size: 0.75rem;
+  outline: none;
+}
+.ssr-textarea {
+  resize: vertical;
+  min-height: 4rem;
+  font-family: var(--font-data);
+}

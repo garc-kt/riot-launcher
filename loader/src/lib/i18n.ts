@@ -1,41 +1,30 @@
-import { reactive } from 'vue'
-import translations from '../../translations.json'
+import { useI18n as useVueI18n } from 'vue-i18n'
+import { LOADER_LANGUAGES } from '@riot/i18n'
 import { useConfig } from './config'
 
-const EN = translations.languages[0]
-type TranslationKey = keyof typeof EN.translations
-type TranslationMap = Record<TranslationKey, string>
-
-const current = reactive<TranslationMap>({ ...EN.translations })
-
-const languages = translations.languages.map((x) => ({
-  id: x.id,
-  name: x.name,
-}))
-
-const switchTo = (id: string) => {
-  for (const lang of translations.languages) {
-    if (lang.id === id) {
-      Object.assign(current, lang.translations)
-      break
-    }
-  }
-}
-
-const text = (key: TranslationKey): string => {
-  if (key in current) {
-    return current[key]
-  }
-  return `{{${key}}}`
-}
-
-const _i18n = {
-  languages,
-  switchTo,
-  t: text,
-}
-
+/**
+ * Thin wrapper over vue-i18n's own composable: syncs the active locale from
+ * the persisted `[app] language` config setting (so switching language on
+ * the welcome screen actually sticks), and exposes the language list for
+ * the picker. Must be called during a component's synchronous setup(), same
+ * as vue-i18n's own useI18n() — the returned `t` is a stable reference safe
+ * to call later from async handlers (e.g. a dialog.message() callback).
+ */
 export const useI18n = () => {
-  _i18n.switchTo(useConfig().app.language())
-  return _i18n
+  const i18n = useVueI18n()
+  const config = useConfig()
+
+  const configLang = config.app.language()
+  if (configLang && i18n.locale.value !== configLang) {
+    i18n.locale.value = configLang
+  }
+
+  return {
+    t: i18n.t,
+    locale: i18n.locale,
+    languages: LOADER_LANGUAGES,
+    switchTo: (id: string) => {
+      i18n.locale.value = id
+    },
+  }
 }

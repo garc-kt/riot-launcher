@@ -1,0 +1,20 @@
+{
+  "name": "@riot/contracts",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./conflict": "./src/conflict.ts",
+    "./lifecycle": "./src/lifecycle.ts",
+    "./theming": "./src/theming.ts",
+    "./manifest": "./src/manifest.ts",
+    "./plugin-entry": "./src/plugin-entry.ts",
+    "./module": "./src/module.ts",
+    "./snooze-migration": "./src/snooze-migration.ts"
+  },
+  "dependencies": {
+    "@std/yaml": "npm:@jsr/std__yaml@^1.0.2",
+    "zod": "^3.23.8"
+  }
+}

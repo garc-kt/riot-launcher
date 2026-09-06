@@ -46,7 +46,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -83,6 +83,17 @@ jobs:
             cp "loader/src-tauri/target/release/pengu-loader.exe" bin/
           fi
 
+      - name: Stage first-party companion app
+        # @companion/ is a reserved namespace: both the C++ core's plugin
+        # scanner and the loader's own gallery scanner only treat @<name>/
+        # folders as plugin groups when they contain a further subfolder
+        # (@author/plugin/index.js) — a bare @companion/index.js is invisible
+        # to both, so it can never be listed or hash-disabled like a user
+        # plugin. It's loaded directly by plugins/src/preload/loader.ts.
+        run: |
+          mkdir -p bin/plugins/@companion
+          cp app/dist/index.js bin/plugins/@companion/index.js
+
       - name: Package Release Zip
         run: |
           TAG_NAME="${GITHUB_REF#refs/tags/}"
@@ -92,7 +103,7 @@ jobs:
           ZIP_NAME="riot-loader-${TAG_NAME}-windows-x64.zip"
           echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
           cd bin
-          7z a "../bin/${ZIP_NAME}" "Riot Loader.exe" "core.dll"
+          7z a "../bin/${ZIP_NAME}" "Riot Loader.exe" "core.dll" "plugins"
 
       - name: Upload build output
         uses: actions/upload-artifact@v4
