@@ -62,15 +62,53 @@ pub fn enable_shadow(hwnd: isize) {
 
 /// Check if webview2 is installed or not.
 pub fn is_webview2_installed() -> bool {
-    let hklm = RegKey::predef(HKEY_LOCAL_MACHINE);
-    const REG_KEY: &str =
-        r"SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}";
+    let guids = [
+        "{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}",
+        "{F3017226-992A-44A6-992E-DEE82A707704}",
+    ];
+    let prefixes = [
+        r"SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients",
+        r"SOFTWARE\Microsoft\EdgeUpdate\Clients",
+    ];
 
-    if let Ok(key) = hklm.open_subkey_with_flags(REG_KEY, KEY_READ) {
-        if let Ok(location) = key.get_value("location") as Result<String, Error> {
-            if let Ok(pv) = key.get_value("pv") as Result<String, Error> {
-                let exe_path = [&location, &pv, "msedge.exe"].join("\\");
-                return PathBuf::from(exe_path).exists();
+    let hklm = RegKey::predef(HKEY_LOCAL_MACHINE);
+    for prefix in &prefixes {
+        for guid in &guids {
+            let reg_key = format!("{}\\{}", prefix, guid);
+            if let Ok(key) = hklm.open_subkey_with_flags(&reg_key, KEY_READ) {
+                if let Ok(location) = key.get_value("location") as Result<String, Error> {
+                    if let Ok(pv) = key.get_value("pv") as Result<String, Error> {
+                        let base_dir = std::path::Path::new(&location).join(&pv);
+                        if base_dir.join("msedgewebview2.exe").exists()
+                            || base_dir.join("msedge.exe").exists()
+                            || base_dir.exists()
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Direct fallback check for default evergreen installation path
+    let default_paths = [
+        r"C:\Program Files (x86)\Microsoft\EdgeWebView\Application",
+        r"C:\Program Files\Microsoft\EdgeWebView\Application",
+    ];
+    for default_dir in &default_paths {
+        let p = std::path::Path::new(default_dir);
+        if p.exists() {
+            if let Ok(entries) = std::fs::read_dir(p) {
+                for entry in entries.flatten() {
+                    let sub = entry.path();
+                    if sub.is_dir()
+                        && (sub.join("msedgewebview2.exe").exists()
+                            || sub.join("msedge.exe").exists())
+                    {
+                        return true;
+                    }
+                }
             }
         }
     }
