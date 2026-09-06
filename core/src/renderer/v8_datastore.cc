@@ -244,13 +244,13 @@ static V8Value *v8_list_plugin_files(V8Value *const args[], int argc)
             int idx = 0;
             for (const auto &f : files)
             {
-                auto str = CefStr(f.wstring());
+                auto str = CefStr::from_path(f);
                 arr->set(idx++, V8Value::string(&str));
             }
-            return arr;
+            return reinterpret_cast<V8Value *>(arr);
         }
     }
-    return V8Array::create(0);
+    return reinterpret_cast<V8Value *>(V8Array::create(0));
 }
 
 V8HandlerFunctionEntry v8_DataStoreEntries[]
