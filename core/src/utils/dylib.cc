@@ -63,8 +63,20 @@ static void *scan_memory_bytes(void *data, size_t length, const std::vector<int>
     auto image_start = (uint8_t *)data;
     auto image_end = image_start + length;
 
-    auto occurrence = std::search(image_start, image_end, find_bytes.begin(), find_bytes.end());
-    return (occurrence != image_end) ? occurrence : nullptr;
+    auto first = std::search(image_start, image_end, find_bytes.begin(), find_bytes.end());
+    if (first == image_end)
+        return nullptr;
+
+    // Refuse an ambiguous match: patching the wrong occurrence of a
+    // structurally-common byte sequence (e.g. a generic cmp/jcc idiom) in a
+    // multi-megabyte module silently corrupts an unrelated function instead
+    // of failing loudly. A caller that gets nullptr here must treat the
+    // hook as unavailable, not retry against a second guess.
+    auto second = std::search(first + 1, image_end, find_bytes.begin(), find_bytes.end());
+    if (second != image_end)
+        return nullptr;
+
+    return first;
 }
 
 static void *get_base_address(const void *rladdr)

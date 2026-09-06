@@ -10,6 +10,18 @@ static cef_color_t get_background_color(void *rcx, cef_browser_settings_t *, cef
 
 static void fix_browser_background(const void *rladdr)
 {
+    // KNOWN BROKEN as of the Vanguard-flavored 16.17 client (libcef.dll
+    // 108.4.13.0): CEF_VERSION_MAJOR alone (checked by the caller) doesn't
+    // guarantee this exact byte layout still holds, and find_memory() scans
+    // from the start of the *entire* module with no anchor near `rladdr`,
+    // so a stale/ambiguous pattern can silently patch the wrong function
+    // instead of the real CefContext::GetBackgroundColor(). That's exactly
+    // what was happening: every LeagueClientUxRender.exe crashed with the
+    // same deterministic 0xC0000005 at the same offset in libcef.dll,
+    // every launch. This is cosmetic-only (transparent CEF background), so
+    // disable it rather than risk corrupting an unrelated function until
+    // the pattern is re-derived against the current libcef.dll build.
+#if 0
     const char *pattern = "41 83 F8 01 74 0B 41 83 F8 02 75 0A 45 31 C0";
     using Fn = decltype(&get_background_color);
     static hook::Hook<Fn> GetBackgroundColor;
@@ -18,6 +30,9 @@ static void fix_browser_background(const void *rladdr)
 
     if (func != nullptr)
         GetBackgroundColor.hook(func, get_background_color);
+#else
+    (void)rladdr;
+#endif
 }
 
 bool check_libcef_version(bool is_browser)
