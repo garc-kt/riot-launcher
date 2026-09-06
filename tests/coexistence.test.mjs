@@ -34,4 +34,20 @@ describe('Upstream Coexistence Conflict Detection (§9.1)', () => {
     })
     assert.equal(err, null)
   })
+
+  test('allows activation when IFEO debugger points to previous version of Riot Loader', () => {
+    const err = detectUpstreamConflict({
+      ifeoDebugger: 'rundll32 "C:\\Users\\Perseus\\Downloads\\riot-loader-v1.0.0-windows-x64\\core.dll", #6000',
+      ourCorePath: 'C:\\Users\\Perseus\\Downloads\\riot-loader-v1.0.2-windows-x64\\core.dll',
+    })
+    assert.equal(err, null)
+  })
+
+  test('allows activation when proxy DLL points to previous version of Riot Loader', () => {
+    const err = detectUpstreamConflict({
+      leagueProxyDllTarget: 'C:\\Users\\Perseus\\Downloads\\riot-loader-v1.0.0-windows-x64\\core.dll',
+      ourCorePath: 'C:\\Users\\Perseus\\Downloads\\riot-loader-v1.0.2-windows-x64\\core.dll',
+    })
+    assert.equal(err, null)
+  })
 })

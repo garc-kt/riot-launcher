@@ -28,7 +28,7 @@ export function detectUpstreamConflict(options: ConflictCheckOptions = {}): stri
     const cleanBase = base.replace(/[\\/]+$/, '')
     const penguPath = `${cleanBase}\\Pengu Loader`
     if (dirExists(penguPath)) {
-      return `Detected existing upstream PenguLoader installation at "${penguPath}". Both proxy system DLLs and cannot coexist. Please remove upstream PenguLoader before installing Companion Loader.`
+      return `Detected existing upstream PenguLoader installation at "${penguPath}". Both proxy system DLLs and cannot coexist. Please remove upstream PenguLoader before installing Riot Loader.`
     }
   }
 
@@ -36,8 +36,9 @@ export function detectUpstreamConflict(options: ConflictCheckOptions = {}): stri
   if (ifeoDebugger) {
     const lower = ifeoDebugger.toLowerCase()
     const ourCoreLower = ourCorePath.toLowerCase()
-    if (lower.includes('pengu') || (lower.startsWith('rundll32') && !lower.includes(ourCoreLower))) {
-      return `Detected conflicting IFEO debugger entry: "${ifeoDebugger}". Please uninstall existing loader before activating Companion Loader.`
+    const isRiotLoader = lower.includes('riot-loader') || lower.includes('riot loader') || lower.includes('riot_loader')
+    if (lower.includes('pengu') || (lower.startsWith('rundll32') && !lower.includes(ourCoreLower) && !isRiotLoader)) {
+      return `Detected conflicting IFEO debugger entry: "${ifeoDebugger}". Please uninstall existing loader before activating Riot Loader.`
     }
   }
 
@@ -45,7 +46,8 @@ export function detectUpstreamConflict(options: ConflictCheckOptions = {}): stri
   if (leagueProxyDllTarget) {
     const targetNorm = leagueProxyDllTarget.toLowerCase().replace(/\//g, '\\')
     const ourNorm = ourCorePath.toLowerCase().replace(/\//g, '\\')
-    if (targetNorm !== ourNorm) {
+    const isRiotLoader = targetNorm.includes('riot-loader') || targetNorm.includes('riot loader') || targetNorm.includes('riot_loader')
+    if (targetNorm !== ourNorm && !isRiotLoader) {
       return `Detected conflicting proxy DLL pointing to "${leagueProxyDllTarget}". Please remove it before proceeding.`
     }
   }

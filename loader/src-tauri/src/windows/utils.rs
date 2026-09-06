@@ -128,7 +128,7 @@ pub fn detect_upstream_conflict() -> Option<String> {
         let pengu_dir = std::path::Path::new(&base).join("Pengu Loader");
         if pengu_dir.exists() {
             return Some(format!(
-                "Detected existing upstream PenguLoader installation at \"{}\". Both proxy system DLLs and cannot coexist. Please remove upstream PenguLoader before installing Companion Loader.",
+                "Detected existing upstream PenguLoader installation at \"{}\". Both proxy system DLLs and cannot coexist. Please remove upstream PenguLoader before installing Riot Loader.",
                 pengu_dir.display()
             ));
         }
@@ -140,9 +140,10 @@ pub fn detect_upstream_conflict() -> Option<String> {
         if let Ok(val) = key.get_value("Debugger") as Result<String, Error> {
             let lower = val.to_lowercase();
             let our_core = crate::config::core_path().display().to_string().to_lowercase();
-            if lower.contains("pengu") || (lower.starts_with("rundll32") && !lower.contains(&our_core)) {
+            let is_riot = lower.contains("riot-loader") || lower.contains("riot loader") || lower.contains("riot_loader");
+            if lower.contains("pengu") || (lower.starts_with("rundll32") && !lower.contains(&our_core) && !is_riot) {
                 return Some(format!(
-                    "Detected conflicting IFEO debugger entry: \"{}\". Please uninstall existing loader before activating Companion Loader.",
+                    "Detected conflicting IFEO debugger entry: \"{}\". Please uninstall existing loader before activating Riot Loader.",
                     val
                 ));
             }
@@ -155,7 +156,9 @@ pub fn detect_upstream_conflict() -> Option<String> {
             let proxy_path = league_dir.join(proxy_name);
             if proxy_path.exists() {
                 if let Ok(target) = std::fs::read_link(&proxy_path) {
-                    if target != our_core {
+                    let target_str = target.display().to_string().to_lowercase();
+                    let is_riot = target_str.contains("riot-loader") || target_str.contains("riot loader") || target_str.contains("riot_loader");
+                    if target != our_core && !is_riot {
                         return Some(format!(
                             "Detected conflicting proxy DLL at \"{}\" pointing to \"{}\". Please remove it before proceeding.",
                             proxy_path.display(),
@@ -164,7 +167,9 @@ pub fn detect_upstream_conflict() -> Option<String> {
                     }
                 } else if let Ok(canon) = proxy_path.canonicalize() {
                     if let Ok(our_canon) = our_core.canonicalize() {
-                        if canon != our_canon {
+                        let canon_str = canon.display().to_string().to_lowercase();
+                        let is_riot = canon_str.contains("riot-loader") || canon_str.contains("riot loader") || canon_str.contains("riot_loader");
+                        if canon != our_canon && !is_riot {
                             return Some(format!(
                                 "Detected conflicting proxy DLL at \"{}\". Please remove it before proceeding.",
                                 proxy_path.display()

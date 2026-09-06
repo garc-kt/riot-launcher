@@ -32,7 +32,7 @@ bool check_libcef_version(bool is_browser)
         if (get_version == nullptr || get_version(0) != CEF_VERSION_MAJOR)
         {
             if (is_browser)
-                dialog::alert("Companion Loader does not support your Client version.", "Companion Loader");
+                dialog::alert("Riot Loader does not support your Client version.", "Riot Loader");
             return false;
         }
 
