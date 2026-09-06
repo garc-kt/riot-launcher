@@ -1,66 +1,88 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root, .theme-cosmic {
-    --background: 251 14% 15%; /* #23212C */
-    --foreground: 250 20% 97%;
-    --card: 44 41 55; /* #2C2937 */
-    --card-foreground: 250 20% 97%;
-    --popover: 251 14% 13%;
-    --popover-foreground: 250 20% 97%;
-    --primary: 167 139 250; /* Cosmic violet #a78bfa */
-    --primary-foreground: 35 33 44;
-    --secondary: 253 15% 22%;
-    --secondary-foreground: 250 20% 97%;
-    --muted: 253 14% 19%;
-    --muted-foreground: 252 10% 65%;
-    --accent: 253 15% 24%;
-    --accent-foreground: 250 20% 97%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --border: 252 12% 24%;
-    --input: 252 12% 24%;
-    --ring: 255 90% 75%;
-    --radius: 0.6rem;
-  }
-
-  .theme-vanilla {
-    --background: 74 93% 89%; /* #F1FEC8 - RGB 241, 254, 200 */
-    --foreground: 251 14% 15%; /* #23212C deep text */
-    --card: 255 255 255; /* Clean crisp white cards */
-    --card-foreground: 251 14% 15%;
-    --popover: 74 80% 94%;
-    --popover-foreground: 251 14% 15%;
-    --primary: 251 14% 20%; /* Deep contrast brand primary */
-    --primary-foreground: 241 254 200;
-    --secondary: 74 45% 85%;
-    --secondary-foreground: 251 14% 15%;
-    --muted: 74 40% 86%;
-    --muted-foreground: 251 10% 40%;
-    --accent: 74 60% 86%;
-    --accent-foreground: 251 14% 15%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 74 35% 80%;
-    --input: 74 35% 80%;
-    --ring: 251 14% 20%;
-    --radius: 0.6rem;
-  }
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: rgb(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-card: rgb(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+:root, .theme-cosmic {
+  --background: 251 14% 15%; /* #23212C */
+  --foreground: 250 20% 97%;
+  --card: 44 41 55; /* #2C2937 */
+  --card-foreground: 250 20% 97%;
+  --popover: 251 14% 13%;
+  --popover-foreground: 250 20% 97%;
+  --primary: 167 139 250; /* Cosmic violet #a78bfa */
+  --primary-foreground: 35 33 44;
+  --secondary: 253 15% 22%;
+  --secondary-foreground: 250 20% 97%;
+  --muted: 253 14% 19%;
+  --muted-foreground: 252 10% 65%;
+  --accent: 253 15% 24%;
+  --accent-foreground: 250 20% 97%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 85.7% 97.3%;
+  --border: 252 12% 24%;
+  --input: 252 12% 24%;
+  --ring: 255 90% 75%;
+  --radius: 0.6rem;
+}
 
-  body {
-    @apply bg-background text-foreground select-none;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    letter-spacing: -0.01em;
-  }
+.theme-vanilla {
+  --background: 74 93% 89%; /* #F1FEC8 - RGB 241, 254, 200 */
+  --foreground: 251 14% 15%; /* #23212C deep text */
+  --card: 255 255 255; /* Clean crisp white cards */
+  --card-foreground: 251 14% 15%;
+  --popover: 74 80% 94%;
+  --popover-foreground: 251 14% 15%;
+  --primary: 251 14% 20%; /* Deep contrast brand primary */
+  --primary-foreground: 241 254 200;
+  --secondary: 74 45% 85%;
+  --secondary-foreground: 251 14% 15%;
+  --muted: 74 40% 86%;
+  --muted-foreground: 251 10% 40%;
+  --accent: 74 60% 86%;
+  --accent-foreground: 251 14% 15%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 74 35% 80%;
+  --input: 74 35% 80%;
+  --ring: 251 14% 20%;
+  --radius: 0.6rem;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  user-select: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+  letter-spacing: -0.01em;
 }
 
 :root {

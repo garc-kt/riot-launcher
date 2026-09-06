@@ -13,10 +13,11 @@
   "dependencies": {
     "@std/ini": "npm:@jsr/std__ini@^0.225",
     "@std/yaml": "npm:@jsr/std__yaml@^1.0.2",
+    "@tailwindcss/vite": "^4.3.3",
     "@tauri-apps/api": "^1",
     "class-variance-authority": "^0.7.0",
     "js-yaml": "^4.1.0",
-    "tailwind-merge": "^2.4.0",
+    "tailwind-merge": "^3.6.0",
     "tippy.js": "^6.3.7",
     "vue": "^3.4.38"
   },
@@ -25,10 +26,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20",
     "@vitejs/plugin-vue": "^5.1.2",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.41",
-    "tailwindcss": "^3.4.7",
-    "tailwindcss-animate": "^1.0.7",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5.2.2",
     "vite": "^5.3.1",
     "vue-tsc": "^2.1.4"
