@@ -458,3 +458,5 @@ bin/*
 include/
 *.g.h
 *.tsbuildinfo
+personal/**/dist/
+personal/**/index.js

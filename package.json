@@ -10,6 +10,7 @@
     "i18n:check": "node --test tests/i18n.test.mjs",
     "build": "pnpm --filter pengujs build && pnpm --filter riot-loader build && pnpm --filter companion-app build",
     "build:plugins": "pnpm --filter pengujs build",
+    "build:snooze": "node plugins/node_modules/esbuild/bin/esbuild personal/snooze/src/index.ts --bundle --format=esm --platform=browser --outfile=personal/snooze/index.js",
     "build:loader": "pnpm --filter riot-loader build",
     "build:app": "pnpm --filter companion-app build",
     "typecheck": "pnpm --filter pengujs exec tsc --noEmit && pnpm --filter riot-loader exec vue-tsc --noEmit && pnpm --filter companion-app exec vue-tsc --noEmit",

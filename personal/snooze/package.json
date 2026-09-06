@@ -7,6 +7,9 @@
     ".": "./src/index.ts",
     "./*": "./src/*.ts"
   },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --format=esm --platform=browser --outfile=index.js"
+  },
   "dependencies": {
     "@riot/contracts": "workspace:*",
     "@riot/lcu": "workspace:*"
