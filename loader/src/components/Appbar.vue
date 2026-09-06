@@ -13,7 +13,7 @@ defineProps<{
 
 const { settings, themeMode, toggleThemeMode } = useRoot()
 const { t } = useI18n()
-const appVersion = (typeof window !== 'undefined' ? (window as any).appVersion : '1.0.2') || '1.0.2'
+const appVersion = (typeof window !== 'undefined' ? (window as any).appVersion : '1.0.3') || '1.0.3'
 const isFocused = ref(true)
 let unlistenFocus: (() => void) | null = null
 

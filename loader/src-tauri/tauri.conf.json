@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "Riot Loader",
-    "version": "1.0.2"
+    "version": "1.0.3"
   },
   "tauri": {
     "allowlist": {

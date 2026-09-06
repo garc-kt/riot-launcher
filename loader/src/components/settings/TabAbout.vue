@@ -11,7 +11,7 @@ const links = {
   penguHome: 'https://pengu.lol',
 }
 
-const appVersion = (typeof window !== 'undefined' ? (window as any).appVersion : '1.0.2') || '1.0.2'
+const appVersion = (typeof window !== 'undefined' ? (window as any).appVersion : '1.0.3') || '1.0.3'
 
 const openUrl = (url: string) => {
   shell.open(url)
