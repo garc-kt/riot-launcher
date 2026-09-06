@@ -1,5 +1,5 @@
-name: companion-app
-version: 1.0.1
+name: Riot Companion
+version: 1.0.2
 author: Companion
 description: First-party LoL Companion Platform client application
 main: index.js
