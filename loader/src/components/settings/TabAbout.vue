@@ -8,7 +8,7 @@ const links = {
   penguHome: 'https://pengu.lol',
 }
 
-const appVersion = (typeof window !== 'undefined' ? (window as any).appVersion : '1.0.1') || '1.0.1'
+const appVersion = (typeof window !== 'undefined' ? (window as any).appVersion : '1.0.2') || '1.0.2'
 
 const openUrl = (url: string) => {
   shell.open(url)
@@ -17,37 +17,46 @@ const openUrl = (url: string) => {
 
 <template>
   <div class="space-y-6">
-    <div class="flex flex-col space-y-2">
-      <h3 class="text-lg font-bold text-white tracking-tight">Riot Loader v{{ appVersion }}</h3>
-      <p class="text-xs text-neutral-400 leading-relaxed">
-        A high-performance standalone Win32 client companion platform with native constructable theming, runtime extensions, and match safety controls.
+    <div class="riot-card p-4 rounded-lg flex flex-col space-y-2.5">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-bold text-foreground font-serif uppercase tracking-wider">
+          Riot Loader
+        </h3>
+        <span class="text-[10px] px-2 py-0.5 rounded border border-border bg-muted text-muted-foreground font-mono font-bold">
+          v{{ appVersion }}
+        </span>
+      </div>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        High-performance standalone Win32 League of Legends client companion platform with native constructable theming, runtime extensions, and match safety controls.
       </p>
       <div class="pt-2">
         <button
-          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium border border-white/15 hover:bg-white/10 text-white transition-colors cursor-pointer"
+          class="riot-btn-primary inline-flex items-center gap-2 px-3.5 py-1.5 rounded text-xs"
           @click="openUrl(links.riotRepo)"
         >
-          <GitHubIcon :size="16" />
+          <GitHubIcon :size="15" />
           <span>GitHub Repository</span>
         </button>
       </div>
     </div>
 
-    <div class="border-t border-white/10 pt-4 space-y-2">
-      <h4 class="text-xs font-semibold uppercase tracking-wider text-neutral-400">Upstream Attribution & License</h4>
-      <p class="text-xs text-neutral-400 leading-relaxed">
-        Riot Loader is an enhanced fork of <span class="text-neutral-300 font-medium">Pengu Loader</span> (Copyright © 2024 Pengu Loader), licensed under the MIT License.
+    <div class="riot-card p-4 rounded-lg space-y-3">
+      <h4 class="text-xs font-bold uppercase tracking-[0.14em] text-foreground font-serif">
+        Attribution & Upstream
+      </h4>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Riot Loader is an enhanced fork of <span class="text-foreground font-semibold">Pengu Loader</span> (Copyright © 2024 Pengu Loader), licensed under the MIT License.
       </p>
       <div class="flex items-center space-x-3 pt-1">
         <button
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-neutral-300 border border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
+          class="riot-btn-secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold"
           @click="openUrl(links.penguHome)"
         >
           <LinkIcon :size="14" />
           <span>pengu.lol</span>
         </button>
         <button
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-neutral-300 border border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
+          class="riot-btn-secondary inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold"
           @click="openUrl(links.penguRepo)"
         >
           <GitHubIcon :size="14" />

@@ -58,61 +58,65 @@ const changeLeagueDir = async () => {
 </script>
 
 <template>
-  <div class="space-y-5">
+  <div class="space-y-6">
     <!-- Launch Settings -->
-    <div>
-      <h3 class="font-semibold text-neutral-400 text-sm mb-2">Launch Settings</h3>
+    <div class="riot-card p-3.5 rounded-lg">
+      <h3 class="font-bold text-foreground text-xs uppercase tracking-[0.14em] font-serif mb-2">Launch Settings</h3>
       <label class="flex items-start gap-3 cursor-pointer">
         <input
           type="checkbox"
           :checked="startup"
-          class="mt-1 size-4 rounded accent-purple-500 cursor-pointer"
+          class="mt-1 size-4 rounded cursor-pointer accent-[var(--hextech-gold)]"
           @change="toggleStartup"
         />
         <div class="flex flex-col">
-          <span class="text-sm text-neutral-200">Run on startup</span>
-          <p class="text-xs text-neutral-400">Automatically run Riot Loader when your computer starts.</p>
+          <span class="text-xs font-bold text-foreground">Run on Windows startup</span>
+          <p class="text-[11px] text-muted-foreground mt-0.5">Automatically launch Riot Loader when your system starts.</p>
         </div>
       </label>
     </div>
 
     <!-- Plugins Folder -->
-    <div>
-      <h3 class="font-semibold text-neutral-400 text-sm mb-2">Plugins Folder</h3>
-      <span
-        class="block text-xs font-mono text-neutral-300 px-3 py-2 bg-white/5 hover:bg-white/10 rounded-md cursor-pointer border border-white/5 transition-colors truncate"
+    <div class="riot-card p-3.5 rounded-lg">
+      <h3 class="font-bold text-foreground text-xs uppercase tracking-[0.14em] font-serif mb-2">Plugins Folder</h3>
+      <p class="text-[11px] text-muted-foreground mb-2">Directory where user plugins and custom scripts are discovered.</p>
+      <div
+        class="riot-input text-xs font-mono px-3 py-2 rounded cursor-pointer truncate flex items-center justify-between gap-2"
         @click="changePluginsDir"
       >
-        {{ app.plugins_dir() || './plugins' }}
-      </span>
+        <span class="truncate">{{ app.plugins_dir() || './plugins' }}</span>
+        <span class="text-[10px] uppercase font-bold text-primary font-serif tracking-wider shrink-0">Browse</span>
+      </div>
     </div>
 
     <!-- LoL Client Location -->
-    <div :class="{ 'opacity-50 pointer-events-none': app.activation_mode() === ActivationMode.Universal }">
-      <h3 class="font-semibold text-neutral-400 text-sm mb-2">LoL Client Location</h3>
-      <span
-        class="block text-xs font-mono text-neutral-300 px-3 py-2 bg-white/5 hover:bg-white/10 rounded-md cursor-pointer border border-white/5 transition-colors truncate"
+    <div class="riot-card p-3.5 rounded-lg" :class="{ 'opacity-40 pointer-events-none': app.activation_mode() === ActivationMode.Universal }">
+      <h3 class="font-bold text-foreground text-xs uppercase tracking-[0.14em] font-serif mb-2">LoL Client Location</h3>
+      <p class="text-[11px] text-muted-foreground mb-2">Path to your League of Legends installation directory.</p>
+      <div
+        class="riot-input text-xs font-mono px-3 py-2 rounded cursor-pointer truncate flex items-center justify-between gap-2"
         @click="changeLeagueDir"
       >
-        {{ app.league_dir() || '(not selected)' }}
-      </span>
+        <span class="truncate">{{ app.league_dir() || '(not selected)' }}</span>
+        <span class="text-[10px] uppercase font-bold text-primary font-serif tracking-wider shrink-0">Browse</span>
+      </div>
     </div>
 
     <!-- Activation Mode -->
-    <div>
-      <h3 class="font-semibold text-neutral-400 text-sm mb-2">Activation Mode</h3>
+    <div class="riot-card p-3.5 rounded-lg">
+      <h3 class="font-bold text-foreground text-xs uppercase tracking-[0.14em] font-serif mb-3">Activation Mode</h3>
       <div class="space-y-3">
         <label class="flex items-start gap-3 cursor-pointer">
           <input
             type="radio"
             name="activation_mode"
             :checked="app.activation_mode() === ActivationMode.Universal"
-            class="mt-1 size-4 accent-purple-500 cursor-pointer"
+            class="mt-1 size-4 cursor-pointer accent-[var(--hextech-gold)]"
             @change="setActivationMode(ActivationMode.Universal)"
           />
           <div class="flex flex-col">
-            <span class="text-sm text-neutral-200">Universal</span>
-            <p class="text-xs text-neutral-400">Apply to all League Clients, including live and PBE.</p>
+            <span class="text-xs font-bold text-foreground">Universal Mode</span>
+            <p class="text-[11px] text-muted-foreground mt-0.5">Automatically hook all League Clients on this machine (Live and PBE).</p>
           </div>
         </label>
 
@@ -121,12 +125,12 @@ const changeLeagueDir = async () => {
             type="radio"
             name="activation_mode"
             :checked="app.activation_mode() === ActivationMode.Targeted"
-            class="mt-1 size-4 accent-purple-500 cursor-pointer"
+            class="mt-1 size-4 cursor-pointer accent-[var(--hextech-gold)]"
             @change="setActivationMode(ActivationMode.Targeted)"
           />
           <div class="flex flex-col">
-            <span class="text-sm text-neutral-200">Targeted</span>
-            <p class="text-xs text-neutral-400">Apply to a specific League Client that you choose. Use it if you get access denied in Universal mode.</p>
+            <span class="text-xs font-bold text-foreground">Targeted Mode</span>
+            <p class="text-[11px] text-muted-foreground mt-0.5">Apply hook only to the selected League Client installation path.</p>
           </div>
         </label>
       </div>

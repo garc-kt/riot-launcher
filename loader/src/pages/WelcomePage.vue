@@ -20,17 +20,24 @@ const selectLang = async (e: Event) => {
 </script>
 
 <template>
-  <div class="flex flex-col justify-center items-center my-auto">
-    <div class="mb-8">
-      <h2 class="text-4xl font-semibold text-center text-white">{{ i18n.t('welcome') }}</h2>
+  <div class="flex flex-col justify-center items-center my-auto p-6 select-none">
+    <div class="mb-6 text-center">
+      <h2 class="text-2xl font-bold tracking-[0.16em] uppercase text-foreground font-serif">
+        {{ i18n.t('welcome') }}
+      </h2>
+      <p class="text-xs text-muted-foreground mt-1 tracking-wider uppercase font-mono">
+        Riot Client Companion
+      </p>
     </div>
 
-    <div class="flex flex-col gap-6 max-w-xs w-full">
+    <div class="riot-card p-6 rounded-lg flex flex-col gap-5 max-w-sm w-full">
       <div class="space-y-1.5">
-        <label class="text-xs text-neutral-400 pl-1">{{ i18n.t('choose_lang') }}</label>
+        <label class="text-xs font-bold uppercase tracking-wider text-muted-foreground font-serif pl-1">
+          {{ i18n.t('choose_lang') }}
+        </label>
         <select
           :value="config.app.language()"
-          class="w-full bg-[#1d1b24] border border-white/10 rounded-md px-3 py-2 text-xs text-white outline-none cursor-pointer"
+          class="riot-input w-full rounded px-3 py-2 text-xs cursor-pointer"
           @change="selectLang"
         >
           <option v-for="lang in i18n.languages" :key="lang.id" :value="lang.id">
@@ -43,17 +50,17 @@ const selectLang = async (e: Event) => {
         <input
           v-model="accepted"
           type="checkbox"
-          class="mt-1 size-4 rounded accent-purple-500 cursor-pointer"
+          class="mt-1 size-4 rounded cursor-pointer accent-[var(--hextech-gold)]"
         />
         <div class="flex flex-col">
-          <span class="text-xs font-medium text-neutral-200">{{ i18n.t('accept_tos') }}</span>
-          <p class="text-[11px] text-neutral-400 leading-relaxed">{{ i18n.t('tos_content') }}</p>
+          <span class="text-xs font-bold text-foreground">{{ i18n.t('accept_tos') }}</span>
+          <p class="text-[11px] text-muted-foreground leading-relaxed mt-0.5">{{ i18n.t('tos_content') }}</p>
         </div>
       </label>
 
       <div class="mt-2">
         <button
-          class="w-full py-2 px-4 rounded-md text-xs font-semibold bg-purple-500 hover:bg-purple-400 text-[#23212C] transition-colors disabled:opacity-50 cursor-pointer"
+          class="riot-btn-primary w-full py-2.5 px-4 rounded text-xs disabled:opacity-40 disabled:pointer-events-none"
           :disabled="!accepted"
           @click="emit('done')"
         >

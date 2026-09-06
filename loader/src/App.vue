@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Config } from './lib/config'
+import { useRoot } from './lib/root'
 import Appbar from './components/Appbar.vue'
 import MainPage from './pages/MainPage.vue'
 import WelcomePage from './pages/WelcomePage.vue'
 import SplashPage from './pages/SplashPage.vue'
 
+const { themeMode } = useRoot()
 const ready = ref(false)
 const welcome = ref(true)
 
@@ -22,7 +24,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="h-screen flex flex-col bg-[#090a0f] text-slate-100 selection:bg-sky-500/30">
+  <div
+    class="h-screen flex flex-col bg-background text-foreground transition-colors duration-250 selection:bg-primary/30 overflow-hidden"
+    :class="`theme-${themeMode}`"
+  >
     <template v-if="ready">
       <Appbar :is-home="!welcome" />
       <WelcomePage v-if="welcome" @done="welcome = false" />

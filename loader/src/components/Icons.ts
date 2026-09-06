@@ -37,6 +37,17 @@ export const HomeIcon = createSvg([
   { tag: 'path', attrs: { d: 'M10 12h4v4h-4z' } },
 ])
 
+export const SearchIcon = createSvg([
+  { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
+  { tag: 'path', attrs: { d: 'M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0' } },
+  { tag: 'path', attrs: { d: 'M21 21l-6 -6' } },
+])
+
+export const FolderIcon = createSvg([
+  { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
+  { tag: 'path', attrs: { d: 'M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2' } },
+])
+
 export const PluginIcon = createSvg([
   { tag: 'path', attrs: { stroke: 'none', d: 'M0 0h24v24H0z', fill: 'none' } },
   { tag: 'path', attrs: { d: 'M9.785 6l8.215 8.215l-2.054 2.054a5.81 5.81 0 1 1 -8.215 -8.215l2.054 -2.054z' } },
