@@ -459,3 +459,4 @@ bin/*
 packages/
 include/
 *.g.h
+*.tsbuildinfo
