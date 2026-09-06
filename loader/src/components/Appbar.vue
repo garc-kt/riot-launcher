@@ -11,7 +11,7 @@ defineProps<{
 }>()
 
 const { settings, tab, setTab, themeMode, toggleThemeMode } = useRoot()
-const appVersion = (typeof window !== 'undefined' ? (window as any).appVersion : '1.0.0') || '1.0.0'
+const appVersion = (typeof window !== 'undefined' ? (window as any).appVersion : '1.0.1') || '1.0.1'
 const isFocused = ref(true)
 let unlistenFocus: (() => void) | null = null
 

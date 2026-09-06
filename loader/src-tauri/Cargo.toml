@@ -1,10 +1,10 @@
 [package]
 name = "riot-loader"
-version = "1.0.0"
+version = "1.0.1"
 description = "Riot Loader app"
 edition = "2021"
 license = "MIT"
-repository = "https://github.com/PenguLoader/PenguLoader"
+repository = "https://github.com/garc-kt/riot-launcher"
 homepage = "https://pengu.lol"
 categories = ["application"]
 keywords = ["pengu", "pengu-loader", "league-client", "league-of-legends"]
