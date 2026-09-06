@@ -38,7 +38,7 @@ function parseValue(val?: string, def?: any) {
       return val === '1' || val === 'true'
     } else if (typeof def === 'number') {
       const num = parseInt(val.trim())
-      if (!isNaN(num) && !isFinite(num)) {
+      if (!isNaN(num) && isFinite(num)) {
         return num
       }
     } else {

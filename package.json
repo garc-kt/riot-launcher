@@ -1,6 +1,6 @@
 {
-  "name": "riot-loader",
-  "version": "1.0.3",
+  "name": "riot-loader-monorepo",
+  "version": "1.0.4",
   "private": true,
   "description": "Riot Loader — LoL Client Companion Platform & Native Loader (Fork of Pengu Loader)",
   "type": "module",

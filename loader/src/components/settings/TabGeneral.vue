@@ -89,7 +89,7 @@ const changeLeagueDir = async () => {
       </div>
     </div>
 
-    <div class="riot-card p-3.5" :class="{ 'opacity-40 pointer-events-none': app.activation_mode() === ActivationMode.Universal }">
+    <div class="riot-card p-3.5" :class="{ 'opacity-40 pointer-events-none': Number(app.activation_mode()) === ActivationMode.Universal }">
       <h3 class="font-semibold text-foreground text-xs mb-2">{{ t('LoL client location') }}</h3>
       <p class="text-[11px] text-foreground-muted mb-2">{{ t('Path to your League of Legends installation directory.') }}</p>
       <div
@@ -108,7 +108,7 @@ const changeLeagueDir = async () => {
           <input
             type="radio"
             name="activation_mode"
-            :checked="app.activation_mode() === ActivationMode.Universal"
+            :checked="Number(app.activation_mode()) === ActivationMode.Universal"
             class="mt-1 size-4 cursor-pointer accent-foreground"
             @change="setActivationMode(ActivationMode.Universal)"
           />
@@ -122,7 +122,7 @@ const changeLeagueDir = async () => {
           <input
             type="radio"
             name="activation_mode"
-            :checked="app.activation_mode() === ActivationMode.Targeted"
+            :checked="Number(app.activation_mode()) === ActivationMode.Targeted"
             class="mt-1 size-4 cursor-pointer accent-foreground"
             @change="setActivationMode(ActivationMode.Targeted)"
           />

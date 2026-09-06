@@ -10,7 +10,7 @@ export enum ActivationMode {
 export const CoreModule = new class {
 
   private useSymlink(): boolean {
-    return Config.get('app', 'activation_mode')
+    return Number(Config.get('app', 'activation_mode'))
       === ActivationMode.Targeted
   }
 
