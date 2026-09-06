@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { ENDPOINTS } from './endpoints.ts'
+import { normalizeSgpRegion } from './sgp.ts'
 import {
   SummonerSchema,
   MatchHistoryItemSchema,
@@ -280,6 +281,36 @@ export class LcuClient {
     if (!raw) throw new Error('Failed to retrieve entitlements token')
     return raw
   }
+
+  /**
+   * Resolve a Riot ID ("Name#TAG") to a puuid.
+   *
+   * Every SGP call is keyed by puuid, and the old name-based summoner lookup
+   * returns 422 on current patches, so this is the only way a human-typed
+   * identifier reaches those APIs.
+   */
+  async resolveRiotId(gameName: string, tagLine: string): Promise<string | null> {
+    const raw = await this.get<{ puuid?: string } | { puuid?: string }[]>(
+      ENDPOINTS.ALIAS_LOOKUP(gameName, tagLine),
+    )
+    // The endpoint has returned both a bare object and a single-element array
+    // across patches; accept either rather than depending on which one ships.
+    const entry = Array.isArray(raw) ? raw[0] : raw
+    const puuid = entry?.puuid
+    return typeof puuid === 'string' && puuid.length > 0 ? puuid : null
+  }
+
+  /**
+   * The account's platform region, normalised to the SGP form ("BR" -> "BR1").
+   * Without this, lookups silently default to NA1 and return nothing for
+   * everyone who doesn't happen to play there.
+   */
+  async getRegion(): Promise<string | null> {
+    const raw = await this.get<{ region?: string }>(ENDPOINTS.REGION_LOCALE)
+    const region = raw?.region
+    if (typeof region !== 'string' || !region) return null
+    return normalizeSgpRegion(region)
+  }
 }
 
 /**
@@ -329,6 +360,11 @@ export function normalizeMatchGame(game: any): any {
       neutralMinionsKilled: Number(stats.neutralMinionsKilled ?? p.neutralMinionsKilled ?? 0),
       visionScore: Number(stats.visionScore ?? p.visionScore ?? 0),
       items: items.length > 0 ? items : (p.items || []),
+      // A remake reports win:false like a defeat; without this the UI can't
+      // tell the two apart. Lives on stats in /lol-match-history payloads.
+      gameEndedInEarlySurrender: Boolean(
+        stats.gameEndedInEarlySurrender ?? p.gameEndedInEarlySurrender ?? false,
+      ),
       spell1Id: p.spell1Id || 0,
       spell2Id: p.spell2Id || 0,
     }

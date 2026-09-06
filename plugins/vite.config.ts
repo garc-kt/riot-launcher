@@ -99,7 +99,11 @@ export default defineConfig(({ command, mode }) => {
         apply: 'build',
         enforce: 'post',
         async closeBundle() {
-          const code = await fs.readFile(root('dist/preload.js'), 'utf-8');
+          const raw = await fs.readFile(root('dist/preload.js'), 'utf-8');
+          const code = sealGlobalScope(raw);
+          // Write the sealed bundle back so dist/preload.js and the bytes
+          // embedded into core.dll are always the exact same script.
+          await fs.writeFile(root('dist/preload.js'), code, 'utf-8');
           const header = generateHeader(code, 'preload_script');
           await fs.writeFile(root('dist/preload.g.h'), header, 'utf-8');
         }
@@ -107,6 +111,44 @@ export default defineConfig(({ command, mode }) => {
     ]
   }
 });
+
+/**
+ * Wrap the emitted bundle so it cannot create ANY global variables.
+ *
+ * The preload bundle is handed to CEF via `frame->execute_java_script()`, i.e.
+ * it runs as a *classic script* sharing the League client's own `window`.
+ * Top-level `var`/`function` declarations in a classic script become
+ * **non-configurable** own properties of `window` (spec: CreateGlobalVarBinding
+ * with deletable = false), so they cannot be `delete`d afterwards.
+ *
+ * Rollup's `iife` format wraps our own modules, but esbuild's minifier hoists
+ * its generated helpers (`__defProp`/`__defNormalProp`/`__publicField`, emitted
+ * whenever anything in the graph uses class fields) *outside* that wrapper, at
+ * the true top level. Minified, those became `var rl`, `var ol` and `var P` —
+ * leaking `window.rl`, `window.ol` and `window.P` into the client.
+ *
+ * `rcp-fe-lol-shared-components` uses `window.P` as a temporary global and then
+ * cleans it up with `delete window.P` from strict-mode code. Against a plain
+ * client that succeeds; against ours the property was already non-configurable,
+ * so the delete threw `TypeError: Cannot delete property 'P' of #<Window>`,
+ * aborting that plugin's initialization and hanging client startup forever at
+ * "[startup] Waiting for Home Hubs to load".
+ *
+ * The minified helper names are an unstable build detail — any bundle change
+ * can re-roll them onto a different Riot global. So rather than dodge one name,
+ * seal the whole script: inside a function body those declarations are
+ * function-scoped and touch `window` not at all. Everything the client is meant
+ * to see is still exported deliberately via explicit `window.X = ...` writes in
+ * src/preload/index.ts.
+ *
+ * Guarded by tests/preload_globals.test.mjs.
+ */
+function sealGlobalScope(code: string) {
+  return `(function(){
+${code}
+})();
+`;
+}
 
 function generateDevLoader(port: number) {
   const template = function (port) {

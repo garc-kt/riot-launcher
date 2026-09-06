@@ -31,6 +31,10 @@ const SGP_SERVERS: Record<string, { matchHistory: string; common: string }> = {
 /** Region ids exposed for a UI picker — derived, not hand-maintained. */
 export const SGP_REGIONS = Object.keys(SGP_SERVERS)
 
+/**
+ * Client-reported region codes that differ from the SGP routing keys above.
+ * `/riotclient/region-locale` reports "BR", but SGP is keyed "BR1".
+ */
 const REGION_ALIASES: Record<string, string> = {
   EUW1: 'EUW',
   NA: 'NA1',
@@ -41,6 +45,12 @@ const REGION_ALIASES: Record<string, string> = {
   OCE: 'OC1',
   LAN: 'LA1',
   LAS: 'LA2',
+}
+
+/** Map a client-reported region code onto its SGP routing key. */
+export function normalizeSgpRegion(region: string): string {
+  const code = (region ?? '').trim().toUpperCase()
+  return REGION_ALIASES[code] || code
 }
 
 export interface SgpContext {

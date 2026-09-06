@@ -185,9 +185,20 @@ static void LoadPlugins(V8Object *window)
     bool noPreloadExt = config::options::no_preload_ext();
     pengu->set(&u"no_preload_ext"_s, V8Value::boolean(noPreloadExt), V8_PROPERTY_ATTRIBUTE_READONLY);
 
-    // Add Pengu and Companion to window.
+    // Add Pengu to window. Do NOT also window->set() "Companion" here with
+    // the same `pengu` value: CEF's set_value_bykey() takes a value
+    // reference per call with no visible add_ref in V8Object::set(), so
+    // handing the same underlying cef_v8value_t to two property slots is a
+    // double-ownership bug — it free's/invalidates the object once the
+    // first slot's reference is dropped, and the second slot then reads
+    // freed memory. That was the actual cause of the deterministic (but
+    // timing-dependent) 0xC0000005 crash inside libcef.dll on every
+    // LeagueClientUxRender.exe launch — confirmed via a WinDbg stack trace
+    // (core!LoadPlugins -> core!V8Object::set -> invalid pointer read deep
+    // in CEF's V8 internals). `window.Companion` is already aliased safely
+    // in JS (a plain reference copy, not a second native ownership claim)
+    // by plugins/src/preload/index.ts: `(window as any).Companion = window.Pengu`.
     window->set(&u"Pengu"_s, pengu, V8_PROPERTY_ATTRIBUTE_READONLY);
-    window->set(&u"Companion"_s, pengu, V8_PROPERTY_ATTRIBUTE_READONLY);
 }
 
 static void ExecutePreloadScript(cef_frame_t *frame)

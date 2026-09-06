@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useMatchesStore } from '@/stores/matches'
 import { useSummonerStore } from '@/stores/summoner'
+import { useGameDataStore } from '@/stores/gameData'
+import ChampionIcon from '@/components/shared/ChampionIcon.vue'
+import { matchResult, MATCH_RESULT_LABEL, MATCH_RESULT_COLOR } from '@riot/contracts'
 import PatchFilter from './PatchFilter.vue'
 import MatchScoreboard from './MatchScoreboard.vue'
 import { ChevronDown, ChevronUp } from 'lucide-vue-next'
 
 const matchesStore = useMatchesStore()
 const summonerStore = useSummonerStore()
+const gameData = useGameDataStore()
+
+onMounted(() => gameData.ensureLoaded())
+
+const resultOf = (match: any) => matchResult(getPlayerParticipant(match))
 const expandedMatchId = ref<number | null>(null)
 
 const toggleExpand = (gameId: number) => {
@@ -57,9 +65,9 @@ const getPlayerParticipant = (match: any) => {
             <div class="text-left">
               <span
                 class="text-xs font-bold"
-                :class="getPlayerParticipant(match).win ? 'text-[var(--hud-foreground)]' : 'text-destructive'"
+                :style="{ color: MATCH_RESULT_COLOR[resultOf(match)] }"
               >
-                {{ getPlayerParticipant(match).win ? 'VICTORY' : 'DEFEAT' }}
+                {{ MATCH_RESULT_LABEL[resultOf(match)] }}
               </span>
               <div class="text-[11px] text-[var(--hud-foreground-muted)]">
                 {{ formatDuration(match.gameDuration) }}
@@ -67,9 +75,14 @@ const getPlayerParticipant = (match: any) => {
             </div>
 
             <!-- Champion Info -->
+            <ChampionIcon
+              :champion-id="getPlayerParticipant(match).championId"
+              :name="getPlayerParticipant(match).championName || gameData.championName(getPlayerParticipant(match).championId)"
+              :size="32"
+            />
             <div class="text-left">
               <div class="text-sm font-bold text-[var(--hud-foreground)]">
-                {{ getPlayerParticipant(match).championName || `Champ #${getPlayerParticipant(match).championId || '?'}` }}
+                {{ getPlayerParticipant(match).championName || gameData.championName(getPlayerParticipant(match).championId) }}
               </div>
               <div class="text-xs text-[var(--hud-foreground-muted)]">
                 {{ match.gameMode }}

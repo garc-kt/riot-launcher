@@ -6,6 +6,7 @@
  * Kept in personal/ workspace for personal use only under the project's licensing policy.
  */
 import type { ModuleDescriptor } from '../../../packages/contracts/src/module.ts'
+import { registerModuleSource, unregisterModuleSource } from '../../../packages/contracts/src/module-bridge.ts'
 import { LcuClient } from '../../../packages/lcu/src/index.ts'
 import { ModuleHost } from '../../../app/src/modules/host.ts'
 
@@ -134,7 +135,7 @@ export async function init(context: PluginContext) {
   lcuClient.bind(context)
 
   host = new ModuleHost({
-    lcu: lcuClient.raw,
+    lcu: lcuClient,
     store: context.ext?.store ?? createMemoryStoreFallback(),
     toast: createToast(),
     ember: context.ext?.ember ?? (typeof window !== 'undefined' ? (window as any).__riotEmberHook : undefined),
@@ -146,9 +147,21 @@ export async function init(context: PluginContext) {
   })
 
   host.register(MODULE_REGISTRY)
+
+  // Publish this host so the companion's Modules tab can render these
+  // modules' settings. Without it snooze runs headless: the modules work but
+  // nothing can configure them, since the companion only ever read its own
+  // (deliberately empty) registry. Registered before initAll() so the UI can
+  // pick it up even if a module's init is slow or throws.
+  registerModuleSource({
+    id: 'snooze-personal',
+    label: 'Snooze Personal',
+    getHost: () => host,
+  })
+
   await host.initAll()
 
-  lcuClient.raw.observe<string>('/lol-gameflow/v1/gameflow-phase', (phase) => {
+  lcuClient.observe<string>('/lol-gameflow/v1/gameflow-phase', (phase) => {
     host?.onPhaseChange(phase as any)
   })
 
@@ -160,6 +173,7 @@ export async function load() {
 }
 
 export async function unload() {
+  unregisterModuleSource('snooze-personal')
   await host?.unloadAll()
   host = null
 }

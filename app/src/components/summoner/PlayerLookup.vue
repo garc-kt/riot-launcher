@@ -25,7 +25,15 @@ const handleSearch = async () => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  // Default to the signed-in account's region. Hardcoding NA1 meant every
+  // lookup outside NA queried the wrong SGP shard and came back empty.
+  try {
+    selectedRegion.value = await sgpService.defaultRegion()
+  } catch {
+    // Keep the NA1 default if the region can't be read.
+  }
+
   if (route.params.riotId) {
     query.value = String(route.params.riotId)
     handleSearch()
@@ -42,7 +50,7 @@ onMounted(() => {
         <input
           v-model="query"
           type="text"
-          placeholder="Enter PUUID or Riot ID..."
+          placeholder="Riot ID (Name#TAG) or PUUID"
           @keydown.enter="handleSearch"
           class="w-full rounded border border-[var(--hud-border)] bg-[rgba(255,255,255,0.04)] py-2 pl-9 pr-3 text-sm text-[var(--hud-foreground)] placeholder:text-[var(--hud-foreground-muted)] focus:border-[var(--hud-foreground-muted)] focus:outline-none"
         />

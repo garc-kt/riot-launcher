@@ -52,6 +52,7 @@ export interface MatchParticipant {
   neutralMinionsKilled: number
   visionScore: number
   items: number[]
+  gameEndedInEarlySurrender?: boolean
   spell1Id: number
   spell2Id: number
 }

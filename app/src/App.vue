@@ -6,11 +6,17 @@ import { useUiStore } from '@/stores/ui'
 import { useSettingsStore } from '@/stores/settings'
 import { lcuClient } from '@/services/lcu/client'
 import { useLcuEvent } from '@/composables/useLcuSocket'
+import { useHotkey } from '@/composables/useHotkey'
+import { COMPANION_TOGGLE_KEY } from '@riot/contracts'
 import type { GameflowPhase } from '@/types'
 import { Sparkles } from 'lucide-vue-next'
 
 const uiStore = useUiStore()
 const settingsStore = useSettingsStore()
+
+// Toggle the companion with F1. Snooze-Manager used the same key for its own
+// menu, so this keeps that muscle memory now that module settings live here.
+useHotkey(COMPANION_TOGGLE_KEY, () => uiStore.toggleOpen())
 
 useLcuEvent<GameflowPhase>('/lol-gameflow/v1/gameflow-phase', (phase) => {
   if (phase) {
@@ -29,7 +35,7 @@ onMounted(async () => {
     <button
       v-if="!uiStore.isOpen && !uiStore.isMatchActive"
       class="hud-btn hud-panel fixed bottom-6 right-6 z-[99999] flex h-11 w-11 items-center justify-center rounded-full"
-      title="Open companion"
+      :title="`Open companion (${COMPANION_TOGGLE_KEY})`"
       @click="uiStore.toggleOpen"
     >
       <Sparkles class="h-5 w-5" />

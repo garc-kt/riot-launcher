@@ -11,5 +11,12 @@ export const ENDPOINTS = {
   CHAMP_SELECT_SESSION: '/lol-champ-select/v1/session',
   CHAMPIONS: (summonerId: number) => `/lol-champions/v1/inventories/${summonerId}/champions`,
   CHAMPION_SUMMARY: '/lol-game-data/assets/v1/champion-summary.json',
+  ITEMS: '/lol-game-data/assets/v1/items.json',
+  /**
+   * Riot ID -> puuid. `/lol-summoner/v1/summoners?name=` is dead on current
+   * patches (422), so this is the only working name resolver.
+   */
+  ALIAS_LOOKUP: (gameName: string, tagLine: string) =>
+    `/lol-summoner/v1/alias/lookup?gameName=${encodeURIComponent(gameName)}&tagLine=${encodeURIComponent(tagLine)}`,
   ENTITLEMENTS_TOKEN: '/entitlements/v1/token',
 } as const

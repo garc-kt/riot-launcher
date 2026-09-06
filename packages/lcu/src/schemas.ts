@@ -35,6 +35,8 @@ export const MatchParticipantSchema = z.object({
   neutralMinionsKilled: z.number().default(0),
   visionScore: z.number().default(0),
   items: z.array(z.number()).default([]),
+  /** True when the game was remade (early surrender), not a real loss. */
+  gameEndedInEarlySurrender: z.boolean().default(false),
   spell1Id: z.number().default(0),
   spell2Id: z.number().default(0),
 })

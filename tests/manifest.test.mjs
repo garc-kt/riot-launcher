@@ -38,7 +38,7 @@ install:
   test('parses the companion\'s manifest (string-form author)', () => {
     const yaml = `
 name: Riot Companion
-version: 1.0.4
+version: 1.0.5
 author: Companion
 description: First-party LoL Companion Platform client application
 main: index.js

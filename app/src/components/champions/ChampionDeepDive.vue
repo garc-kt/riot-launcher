@@ -1,55 +1,55 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import BuildSuggestions from './BuildSuggestions.vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import ChampionAbilities from './ChampionAbilities.vue'
+import ChampionItems from './ChampionItems.vue'
 import ChampionTooltip from './ChampionTooltip.vue'
+import ChampionIcon from '@/components/shared/ChampionIcon.vue'
+import { useGameDataStore } from '@/stores/gameData'
 import type { ChampionSummary } from '@/types'
 import { Search } from 'lucide-vue-next'
 
+const gameData = useGameDataStore()
 const query = ref('')
+const selectedId = ref<number | null>(null)
 
-const sampleChampions: ChampionSummary[] = [
-  {
-    id: 103,
-    name: 'Ahri',
-    alias: 'Ahri',
-    title: 'the Nine-Tailed Fox',
-    roles: ['Mage', 'Assassin'],
-    squarePortraitPath: '/lol-game-data/assets/v1/champion-icons/103.png',
-    winRate: 51.8,
-    pickRate: 9.4,
-    banRate: 3.2,
-  },
-  {
-    id: 238,
-    name: 'Zed',
-    alias: 'Zed',
-    title: 'the Master of Shadows',
-    roles: ['Assassin'],
-    squarePortraitPath: '/lol-game-data/assets/v1/champion-icons/238.png',
-    winRate: 49.6,
-    pickRate: 11.2,
-    banRate: 14.5,
-  },
-  {
-    id: 81,
-    name: 'Ezreal',
-    alias: 'Ezreal',
-    title: 'the Prodigal Explorer',
-    roles: ['Marksman', 'Mage'],
-    squarePortraitPath: '/lol-game-data/assets/v1/champion-icons/81.png',
-    winRate: 50.2,
-    pickRate: 18.5,
-    banRate: 2.1,
-  },
-]
+onMounted(() => gameData.ensureLoaded())
 
-const selectedChampion = ref<ChampionSummary>(sampleChampions[0])
+/**
+ * The client's champion-summary.json carries identity only — no win/pick/ban
+ * rates, which come from third-party aggregators the loader deliberately does
+ * not call. Those fields stay undefined and the UI omits them rather than
+ * showing invented numbers.
+ */
+const champions = computed<ChampionSummary[]>(() =>
+  gameData.championList().map((c) => ({
+    id: c.id,
+    name: c.name,
+    alias: c.alias,
+    title: gameData.championDetail(c.id)?.title || c.roles.join(' / '),
+    roles: c.roles,
+    squarePortraitPath: c.squarePortraitPath,
+  })),
+)
 
-const filteredChampions = () => {
-  if (!query.value.trim()) return sampleChampions
-  const q = query.value.toLowerCase()
-  return sampleChampions.filter((c) => c.name.toLowerCase().includes(q) || c.title.toLowerCase().includes(q))
-}
+const filtered = computed(() => {
+  const q = query.value.trim().toLowerCase()
+  if (!q) return champions.value
+  return champions.value.filter(
+    (c) => c.name.toLowerCase().includes(q) || c.alias.toLowerCase().includes(q),
+  )
+})
+
+// Keep a valid selection as data arrives and as the filter narrows.
+watch(filtered, (list) => {
+  if (list.length === 0) return
+  if (selectedId.value === null || !list.some((c) => c.id === selectedId.value)) {
+    selectedId.value = list[0].id
+  }
+}, { immediate: true })
+
+const selectedChampion = computed<ChampionSummary | null>(
+  () => champions.value.find((c) => c.id === selectedId.value) ?? null,
+)
 </script>
 
 <template>
@@ -68,25 +68,31 @@ const filteredChampions = () => {
     <!-- Champion Selector Badges -->
     <div class="flex gap-2 overflow-x-auto pb-1">
       <button
-        v-for="champ in filteredChampions()"
+        v-for="champ in filtered"
         :key="champ.id"
-        @click="selectedChampion = champ"
+        @click="selectedId = champ.id"
         :class="[
-          'flex items-center gap-2 rounded border px-3 py-1.5 text-xs font-semibold transition-colors',
-          selectedChampion.id === champ.id
+          'flex items-center gap-2 rounded border px-2 py-1.5 text-xs font-semibold transition-colors',
+          selectedId === champ.id
             ? 'border-[var(--hud-foreground-muted)] bg-[var(--hud-border)] text-[var(--hud-foreground)]'
             : 'border-[var(--hud-border)] bg-[rgba(255,255,255,0.04)] text-[var(--hud-foreground-muted)] hover:text-[var(--hud-foreground)]'
         ]"
       >
+        <ChampionIcon :champion-id="champ.id" :name="champ.name" :size="20" />
         <span>{{ champ.name }}</span>
-        <span class="text-[10px] text-[var(--hud-foreground-muted)]">{{ champ.winRate }}%</span>
       </button>
     </div>
 
     <!-- Selected Champion Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <ChampionTooltip :champion="selectedChampion" />
-      <BuildSuggestions :championName="selectedChampion.name" />
+    <div v-if="selectedChampion" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="space-y-4">
+        <ChampionTooltip :champion="selectedChampion" />
+        <ChampionItems :champion-id="selectedChampion.id" :champion-name="selectedChampion.name" />
+      </div>
+      <ChampionAbilities :champion-id="selectedChampion.id" />
+    </div>
+    <div v-else class="py-6 text-center text-xs text-[var(--hud-foreground-muted)]">
+      {{ gameData.loaded ? 'No champions match that filter.' : 'Loading champion data…' }}
     </div>
   </div>
 </template>

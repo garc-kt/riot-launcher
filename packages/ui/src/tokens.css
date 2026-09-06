@@ -31,6 +31,8 @@
   --color-signal-bright: var(--signal-bright);
   --color-signal-foreground: var(--signal-foreground);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-neutral: var(--neutral);
   --color-destructive-foreground: var(--destructive-foreground);
 
   --radius-panel: 0.125rem;
@@ -41,7 +43,16 @@
   --font-data: "Cascadia Code", "Cascadia Mono", Consolas, "Courier New", monospace;
 }
 
-:root, .theme-dark {
+/*
+ * `:host` is not optional. The companion adopts this sheet into a shadow root
+ * (app/src/main.ts), where `:root` matches nothing at all — so without it every
+ * token below is undefined inside the HUD, `background: var(--hud-scrim)`
+ * resolves to nothing, and the panel renders fully transparent over the client
+ * while type and layout still look fine. Tailwind emits its own `@theme` layer
+ * as `:root, :host` for exactly this reason; these bare tokens must match.
+ * Harmless in a normal document, where `:host` simply never matches.
+ */
+:root, :host, .theme-dark {
   --background: #0c0e11;
   --surface: #15181c;
   --surface-2: #1b1f24;
@@ -59,6 +70,11 @@
   --destructive: #d1453d;
   --destructive-foreground: #f5efed;
 
+  /* Match outcomes. Chroma is kept low so a wall of results stays calm next
+     to --signal, which remains the one high-chroma color in the system. */
+  --success: #3fa96b;
+  --neutral: #8b939c;
+
   /* Companion HUD material — translucent glass over the client UI */
   --hud-scrim: rgba(10, 12, 14, 0.72);
   --hud-border: rgba(255, 255, 255, 0.08);
@@ -66,7 +82,8 @@
   --hud-foreground-muted: rgba(238, 240, 242, 0.62);
 }
 
-.theme-light {
+/* `:host(.theme-light)` covers the theme class landing on the shadow host. */
+.theme-light, :host(.theme-light) {
   --background: #f4f5f6;
   --surface: #ffffff;
   --surface-2: #eceef0;
@@ -75,6 +92,9 @@
   --foreground: #14171a;
   --foreground-muted: #565d66;
   --foreground-subtle: #8a9099;
+
+  --success: #2f8354;
+  --neutral: #6c747d;
 
   --signal: #b5691c;
   --signal-bright: #d97e22;

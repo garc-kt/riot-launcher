@@ -7,6 +7,47 @@ import companionCss from './styles/main.css?inline'
 let appInstance: VueApp | null = null
 let hostElement: HTMLElement | null = null
 let stylesheet: CSSStyleSheet | null = null
+let attachmentObserver: MutationObserver | null = null
+
+/**
+ * Keep <companion-root> attached to the live document.
+ *
+ * We mount into the client's own <body>, which the client owns and rebuilds as
+ * it boots — when it swaps the loading splash for the real UI it can drop our
+ * host along with everything else it didn't put there. Vue never notices: the
+ * app stays "mounted" and keeps rendering into a detached tree, so the panel
+ * silently disappears and hotkeys appear dead because they're toggling
+ * something no longer in the document.
+ *
+ * Watching childList on <html> and <body> (deliberately not subtree — the
+ * client mutates constantly and we only care about our own host being dropped
+ * or <body> itself being replaced) is enough to notice and re-append.
+ */
+function keepHostAttached(host: HTMLElement): MutationObserver {
+  let observedBody: HTMLElement | null = null
+
+  const ensureAttached = () => {
+    const body = document.body
+    if (!body) return
+
+    if (body !== observedBody) {
+      // <body> itself was replaced — follow the new one.
+      observer.observe(body, { childList: true })
+      observedBody = body
+    }
+
+    if (!host.isConnected) {
+      body.appendChild(host)
+      console.info('[Companion] Host element was detached by the client — reattached.')
+    }
+  }
+
+  const observer = new MutationObserver(ensureAttached)
+  observer.observe(document.documentElement, { childList: true })
+  ensureAttached()
+
+  return observer
+}
 
 function getStylesheet(): CSSStyleSheet {
   if (!stylesheet) {
@@ -45,6 +86,8 @@ export function bootstrapCompanion(targetContainer?: HTMLElement) {
 
     mountTarget = document.createElement('div')
     shadow.appendChild(mountTarget)
+
+    attachmentObserver = keepHostAttached(hostElement)
   }
 
   const pinia = createPinia()
@@ -60,6 +103,12 @@ export function bootstrapCompanion(targetContainer?: HTMLElement) {
 }
 
 export function teardownCompanion() {
+  // Stop reattaching before we remove the host, or passive mode / the
+  // kill-switch would immediately put it back.
+  if (attachmentObserver) {
+    attachmentObserver.disconnect()
+    attachmentObserver = null
+  }
   if (appInstance) {
     appInstance.unmount()
     appInstance = null
