@@ -1,4 +1,4 @@
-import { Accessor, createRoot, createSignal } from 'solid-js'
+import { ref } from 'vue'
 import { fs, invoke } from '@tauri-apps/api'
 import { ActivationMode } from './core-module'
 import { IniMap } from '@std/ini'
@@ -118,8 +118,8 @@ export const Config = new class {
   }
 }
 
-interface ConfigEntry<T> extends Accessor<T> {
-  // (): T
+interface ConfigEntry<T> {
+  (): T
   (value: T): Promise<void>
   (setter: (prev: T) => T): Promise<void>
 }
@@ -129,44 +129,38 @@ type TransformEntry<T> = {
 }
 
 function defineEntry(section: string, key: string, def: any) {
-  const [get, set] = createSignal()
+  const state = ref<any>(undefined)
   return function (value?: any) {
     if (arguments.length === 0 || value == null) {
-      let val = get()
-      if (val === undefined) {
-        // @ts-ignore
-        val = Config.get(section, key, def)
-        set(() => val)
+      if (state.value === undefined) {
+        state.value = Config.get(section as any, key as any, def)
       }
-      return val
+      return state.value
     } else {
       if (typeof value === 'function') {
-        value = value(get())
+        value = value(state.value)
       }
-      // @ts-ignore
-      Config.set<T>(section, key, value!)
-      set(() => value!)
+      Config.set(section as any, key as any, value!)
+      state.value = value
       return Config.save()
     }
   }
 }
 
-const _config = createRoot(() => {
-  const base = defaultConfig as any
-  const config: Record<string, object> = {}
+const base = defaultConfig as any
+const config: Record<string, object> = {}
 
-  for (const section in defaultConfig) {
-    const sec: Record<string, any> = {}
+for (const section in defaultConfig) {
+  const sec: Record<string, any> = {}
 
-    for (const key in base[section]) {
-      const def = base[section][key]
-      sec[key] = defineEntry(section, key, def)
-    }
-
-    config[section] = sec
+  for (const key in base[section]) {
+    const def = base[section][key]
+    sec[key] = defineEntry(section, key, def)
   }
 
-  return config as TransformEntry<typeof defaultConfig>
-})
+  config[section] = sec
+}
+
+const _config = config as TransformEntry<typeof defaultConfig>
 
 export const useConfig = () => _config

@@ -1,4 +1,4 @@
-import { createSignal, onCleanup, onMount } from 'solid-js'
+import type { Directive } from 'vue'
 import tippy, { type Instance as TippyInstance } from 'tippy.js'
 
 export function isMac() {
@@ -18,20 +18,23 @@ export function getHash(str: string) {
   return hash >>> 0
 }
 
-export function useTippy(tooltip: string) {
-  let instance: TippyInstance
-  const [ref, setRef] = createSignal<HTMLElement>(null!)
-
-  onMount(() => {
-    instance = tippy(ref(), {
-      content: tooltip,
+export const vTippy: Directive<HTMLElement, string> = {
+  mounted(el, binding) {
+    if (!binding.value) return
+    const instance = tippy(el, {
+      content: binding.value,
       arrow: false,
     })
-  })
-
-  onCleanup(() => {
+    ;(el as any)._tippyInstance = instance
+  },
+  updated(el, binding) {
+    const instance = (el as any)._tippyInstance as TippyInstance | undefined
+    if (instance) {
+      instance.setContent(binding.value || '')
+    }
+  },
+  unmounted(el) {
+    const instance = (el as any)._tippyInstance as TippyInstance | undefined
     instance?.destroy()
-  })
-
-  return setRef
+  }
 }

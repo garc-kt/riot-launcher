@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'node:path'
-import solid from 'vite-plugin-solid'
+import vue from '@vitejs/plugin-vue'
 import autoprefixer from 'autoprefixer'
 import tailwindcss from 'tailwindcss'
 
@@ -22,7 +22,7 @@ export default defineConfig({
   },
   publicDir: false,
   plugins: [
-    solid(),
+    vue(),
   ],
   resolve: {
     alias: {

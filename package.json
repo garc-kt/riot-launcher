@@ -11,7 +11,7 @@
     "build:plugins": "pnpm --filter pengujs build",
     "build:loader": "pnpm --filter riot-loader build",
     "build:app": "pnpm --filter companion-app build",
-    "typecheck": "pnpm --filter pengujs exec tsc --noEmit && pnpm --filter riot-loader exec tsc --noEmit && pnpm --filter companion-app exec vue-tsc --noEmit",
+    "typecheck": "pnpm --filter pengujs exec tsc --noEmit && pnpm --filter riot-loader exec vue-tsc --noEmit && pnpm --filter companion-app exec vue-tsc --noEmit",
     "dev:app": "pnpm --filter companion-app dev",
     "dev:loader": "pnpm --filter riot-loader dev",
     "dev:plugins": "pnpm --filter pengujs dev"

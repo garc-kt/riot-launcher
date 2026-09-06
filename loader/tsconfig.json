@@ -22,7 +22,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "jsxImportSource": "solid-js",
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
