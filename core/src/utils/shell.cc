@@ -1,8 +1,5 @@
 #include "pengu.h"
 #include <stdlib.h>
-
-#if OS_WIN
-
 #include <shellapi.h>
 
 void shell::open_url(const char *url)
@@ -30,13 +27,3 @@ void shell::open_folder(const path &path)
     if (pShellExecuteW)
         pShellExecuteW(NULL, L"open", path.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
-
-#elif OS_MAC
-
-void shell::open_folder(const path &path)
-{
-    extern void open_folder_utf8(const char *path);
-    open_folder_utf8(path.c_str());
-}
-
-#endif

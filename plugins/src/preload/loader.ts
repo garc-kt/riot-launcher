@@ -1,4 +1,5 @@
 import { rcp, socket } from './rcp';
+import { createPluginExtensions } from './ext';
 
 const plugins = window.Pengu.plugins
 
@@ -47,9 +48,17 @@ async function loadPlugin(entry: string) {
     // Init immediately
     if (typeof plugin.init === 'function') {
       stage = 'initialize';
-      const pluginName = entry.substring(0, entry.indexOf('/'));
-      const initContext = { rcp, socket };
-      // If it's not top-level JS
+      const slashIndex = entry.indexOf('/');
+      const isDir = slashIndex !== -1;
+      const pluginName = isDir ? entry.substring(0, slashIndex) : '';
+      const extName = isDir ? entry.substring(0, entry.lastIndexOf('/')) : entry.replace(/\.js$/, '');
+
+      const initContext: any = {
+        rcp,
+        socket,
+        ext: createPluginExtensions(extName || 'default'),
+      };
+      // If it's not top-level JS (upstream contract)
       if (pluginName) {
         const meta = { name: pluginName };
         initContext['meta'] = meta;

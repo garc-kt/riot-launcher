@@ -10,9 +10,6 @@ mod shell;
 #[cfg(windows)]
 mod windows;
 
-#[cfg(target_os = "macos")]
-mod macos;
-
 #[macro_export]
 macro_rules! dprintln {
     ($($arg:tt)*) => (#[cfg(debug_assertions)] println!("[D] {}", format!($($arg)*)));
@@ -37,9 +34,9 @@ pub fn build_window<R: tauri::Runtime>(app: &tauri::App<R>) -> tauri::Window<R> 
             {
                 builder.decorations(false)
             }
-            #[cfg(target_os = "macos")]
+            #[cfg(not(windows))]
             {
-                builder.title_bar_style(tauri::TitleBarStyle::Overlay)
+                builder
             }
         }
     }

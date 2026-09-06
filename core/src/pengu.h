@@ -6,12 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef OS_WIN
 #include <windows.h>
-#elif OS_MAC
-#include <unistd.h>
-#define CALLBACK
-#endif
 
 #include <type_traits>
 #include <atomic>
@@ -409,24 +404,19 @@ namespace dialog
     /// 
     /// Show a system message box, it will block the executing thread.
     /// 
-    void alert(const char *message, const char *caption);
+    static void alert(const char *message, const char *caption) {
+        MessageBoxA(NULL, message, caption,
+            MB_ICONINFORMATION | MB_OK | MB_TOPMOST);
+    }
 
     ///
     /// Show a system message box with Yes-No buttons.
     /// @returns true if user pressed `Yes`.
     /// 
-    bool confirm(const char *message, const char *caption);
-
-#if OS_WIN
-    static void alert(const char *message, const char *caption) {
-        MessageBoxA(NULL, message, caption,
-            MB_ICONINFORMATION | MB_OK | MB_TOPMOST);
-    }
     static bool confirm(const char *message, const char *caption) {
         return IDYES == MessageBoxA(NULL, message, caption,
             MB_ICONWARNING/* MB_ICONQUESTION */ | MB_YESNO | MB_TOPMOST);
     }
-#endif
 }
 
 namespace shell

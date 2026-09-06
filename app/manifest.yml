@@ -1,0 +1,5 @@
+name: companion-app
+version: 1.0.0
+author: Companion
+description: First-party LoL Companion Platform client application
+main: index.js

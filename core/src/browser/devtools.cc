@@ -6,16 +6,10 @@
 
 // BROWSER PROCESS ONLY.
 
-#ifndef OS_WIN
-#define VK_OEM_PLUS     0xBB
-#define VK_OEM_MINUS    0xBD
-#endif
-
 static std::unordered_map<int, void *> devtools_map_{};
 
 static void setup_devtools_window(void *handle)
 {
-#if OS_WIN
     HWND window = static_cast<HWND>(handle);
     HWND rclient = static_cast<HWND>(browser::window);
 
@@ -32,9 +26,6 @@ static void setup_devtools_window(void *handle)
     RECT rc; GetClientRect(window, &rc);
     SetWindowPos(window, NULL, 0, 0,
         rc.right - 5, rc.bottom, SWP_NOMOVE | SWP_FRAMECHANGED);
-#elif OS_MAC
-    // TODO: fix window icon & title bar
-#endif
 }
 
 struct DevToolsLifeSpan : CefRefCount<cef_life_span_handler_t>
@@ -85,11 +76,7 @@ struct DevToolsKeyboardHandler : CefRefCount<cef_keyboard_handler_t>
         cef_event_handle_t os_event,
         int* is_keyboard_shortcut)
     {
-#if OS_MAC
-        if (event->modifiers & EVENTFLAG_COMMAND_DOWN)
-#else
         if (event->modifiers & EVENTFLAG_CONTROL_DOWN)
-#endif
         {
             cef_browser_host_t *host = nullptr;
 
@@ -111,29 +98,6 @@ struct DevToolsKeyboardHandler : CefRefCount<cef_keyboard_handler_t>
                 host->set_zoom_level(host,
                     window::get_scaling(host->get_window_handle(host)) - 1.0);
             }
-#if OS_MAC  // Fix cut-copy-paste key bindings on macOS
-            else if (event->windows_key_code == 'C' && event->focus_on_editable_field)
-            {
-                auto frame = browser->get_main_frame(browser);
-                frame->copy(frame);
-                frame->base.release(&frame->base);
-                return true;
-            }
-            else if (event->windows_key_code == 'V' && event->focus_on_editable_field)
-            {
-                auto frame = browser->get_main_frame(browser);
-                frame->paste(frame);
-                frame->base.release(&frame->base);
-                return true;
-            }
-            else if (event->windows_key_code == 'X' && event->focus_on_editable_field)
-            {
-                auto frame = browser->get_main_frame(browser);
-                frame->cut(frame);
-                frame->base.release(&frame->base);
-                return true;
-            }
-#endif
 
             if (host != nullptr)
             {

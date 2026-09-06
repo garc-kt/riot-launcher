@@ -77,3 +77,66 @@ pub fn is_webview2_installed() -> bool {
 
     false
 }
+
+/// Detect existing upstream PenguLoader installation to prevent conflict (§9.1)
+pub fn detect_upstream_conflict() -> Option<String> {
+    let check_dirs = [
+        std::env::var("ProgramFiles").unwrap_or_else(|_| "C:\\Program Files".to_string()),
+        std::env::var("ProgramFiles(x86)").unwrap_or_else(|_| "C:\\Program Files (x86)".to_string()),
+        std::env::var("LOCALAPPDATA").unwrap_or_default(),
+    ];
+    for base in check_dirs {
+        if base.is_empty() { continue; }
+        let pengu_dir = std::path::Path::new(&base).join("Pengu Loader");
+        if pengu_dir.exists() {
+            return Some(format!(
+                "Detected existing upstream PenguLoader installation at \"{}\". Both proxy system DLLs and cannot coexist. Please remove upstream PenguLoader before installing Companion Loader.",
+                pengu_dir.display()
+            ));
+        }
+    }
+
+    let hklm = RegKey::predef(HKEY_LOCAL_MACHINE);
+    let ifeo_path = r"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LeagueClientUx.exe";
+    if let Ok(key) = hklm.open_subkey_with_flags(ifeo_path, KEY_READ) {
+        if let Ok(val) = key.get_value("Debugger") as Result<String, Error> {
+            let lower = val.to_lowercase();
+            let our_core = crate::config::core_path().display().to_string().to_lowercase();
+            if lower.contains("pengu") || (lower.starts_with("rundll32") && !lower.contains(&our_core)) {
+                return Some(format!(
+                    "Detected conflicting IFEO debugger entry: \"{}\". Please uninstall existing loader before activating Companion Loader.",
+                    val
+                ));
+            }
+        }
+    }
+
+    if let Some(league_dir) = crate::config::league_dir() {
+        let our_core = crate::config::core_path();
+        for proxy_name in ["version.dll", "d3d9.dll", "dwrite.dll"] {
+            let proxy_path = league_dir.join(proxy_name);
+            if proxy_path.exists() {
+                if let Ok(target) = std::fs::read_link(&proxy_path) {
+                    if target != our_core {
+                        return Some(format!(
+                            "Detected conflicting proxy DLL at \"{}\" pointing to \"{}\". Please remove it before proceeding.",
+                            proxy_path.display(),
+                            target.display()
+                        ));
+                    }
+                } else if let Ok(canon) = proxy_path.canonicalize() {
+                    if let Ok(our_canon) = our_core.canonicalize() {
+                        if canon != our_canon {
+                            return Some(format!(
+                                "Detected conflicting proxy DLL at \"{}\". Please remove it before proceeding.",
+                                proxy_path.display()
+                            ));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    None
+}

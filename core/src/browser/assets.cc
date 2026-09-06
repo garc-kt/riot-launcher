@@ -111,7 +111,12 @@ private:
 
         CefScopedStr url = request->get_url(request);
         std::u16string path, query_part;
-        path.assign((char16_t *)url.str + 15, url.length - 15); // skip 'https://plugins'
+        if (url.startw("https://companion"))
+            path.assign((char16_t *)url.str + 17, url.length - 17); // skip 'https://companion'
+        else if (url.startw("https://plugins"))
+            path.assign((char16_t *)url.str + 15, url.length - 15); // skip 'https://plugins'
+        else
+            path.assign((char16_t *)url.str, url.length);
 
         // Check query part.
         if ((pos = path.rfind('?')) != std::u16string::npos)
@@ -407,8 +412,9 @@ struct AssetsSchemeHandlerFactory : CefRefCount<cef_scheme_handler_factory_t>
 void browser::register_plugins_domain(cef_request_context_t *ctx)
 {
     auto scheme = u"https"_s;
-    auto domain = u"plugins"_s;
-    auto factory = new AssetsSchemeHandlerFactory();
+    auto domain_plugins = u"plugins"_s;
+    auto domain_companion = u"companion"_s;
 
-    ctx->register_scheme_handler_factory(ctx, &scheme, &domain, factory);
+    ctx->register_scheme_handler_factory(ctx, &scheme, &domain_plugins, new AssetsSchemeHandlerFactory());
+    ctx->register_scheme_handler_factory(ctx, &scheme, &domain_companion, new AssetsSchemeHandlerFactory());
 }

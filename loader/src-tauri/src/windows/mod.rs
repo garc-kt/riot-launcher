@@ -23,6 +23,7 @@ enum ActivationStage {
     CreateSymlink,
     DeleteSymlink,
     RunElevated,
+    UpstreamConflict,
 }
 
 impl fmt::Display for ActivationStage {
@@ -65,6 +66,12 @@ fn decode_result(code: i32) -> ActivationResult {
 }
 
 fn do_activate(symlink: bool, active: bool) -> ActivationResult {
+    if active {
+        if let Some(_conflict) = utils::detect_upstream_conflict() {
+            return Err((ActivationStage::UpstreamConflict, ErrorKind::AlreadyExists));
+        }
+    }
+
     if symlink {
         mod_symlink::do_activate(active)
     } else {
@@ -79,6 +86,11 @@ fn core_is_activated(symlink: bool) -> bool {
     } else {
         mod_ifeo::is_activated()
     }
+}
+
+#[tauri::command]
+fn core_check_upstream_conflict() -> Option<String> {
+    utils::detect_upstream_conflict()
 }
 
 /// Do activate command.
@@ -120,6 +132,7 @@ fn plugin<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("windows")
         .invoke_handler(tauri::generate_handler![
             core_is_activated,
+            core_check_upstream_conflict,
             core_do_activate,
         ])
         .build()

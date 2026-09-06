@@ -163,14 +163,6 @@ static void LoadPlugins(V8Object *window)
     auto superPotato = V8Value::boolean(config::options::super_potato());
     pengu->set(&u"superPotato"_s, superPotato, V8_PROPERTY_ATTRIBUTE_READONLY);
 
-    pengu->set(&u"isMac"_s,
-#ifdef OS_MAC
-        V8Value::boolean(true),
-#else
-        V8Value::boolean(false),
-#endif
-        V8_PROPERTY_ATTRIBUTE_READONLY);
-
     // Pengu.plugins
     auto entries = get_plugin_entries();
     auto pluginEntries = V8Array::create((int)entries.size());
@@ -189,8 +181,9 @@ static void LoadPlugins(V8Object *window)
     auto disabledPlugins = CefStr(config::disabled_plugins());
     pengu->set(&u"disabledPlugins"_s, V8Value::string(&disabledPlugins), V8_PROPERTY_ATTRIBUTE_NONE);
 
-    // Add Pengu to window.
+    // Add Pengu and Companion to window.
     window->set(&u"Pengu"_s, pengu, V8_PROPERTY_ATTRIBUTE_READONLY);
+    window->set(&u"Companion"_s, pengu, V8_PROPERTY_ATTRIBUTE_READONLY);
 }
 
 static void ExecutePreloadScript(cef_frame_t *frame)
@@ -224,7 +217,7 @@ static void CEF_CALLBACK Hooked_OnContextCreated(
     // Detect main page.
     if (is_main_ && url.startw("https://riot:") && url.endw("/index.html"))
     {
-#if OS_WIN && _DEBUG
+#ifdef _DEBUG
         // Open console window.
         AllocConsole();
         SetConsoleTitleA("League Client (main renderer process)");

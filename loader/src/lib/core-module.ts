@@ -37,12 +37,16 @@ export const CoreModule = new class {
   }
 
   /**
+   * Check if an upstream PenguLoader install conflicts (§9.1)
+   */
+  async checkUpstreamConflict(): Promise<string | null> {
+    return await invoke<string | null>('plugin:windows|core_check_upstream_conflict')
+  }
+
+  /**
    * Check if the core module is activated or not.
    */
   async isActivated(): Promise<boolean> {
-    if (window.isMac) {
-      return await invoke<boolean>('plugin:macos|cmd_is_active')
-    }
     return await invoke<boolean>('plugin:windows|core_is_activated', {
       symlink: this.useSymlink()
     })
@@ -54,18 +58,20 @@ export const CoreModule = new class {
    *    the action is successful when error message is empty.
    */
   async doActivate(active: boolean): Promise<{ error: string, activated: boolean }> {
-    let error = ''
-
-    if (window.isMac) {
-      await invoke('plugin:macos|cmd_set_active', {
-        active: active,
-      })
-    } else {
-      error = await invoke<string>('plugin:windows|core_do_activate', {
-        active: active,
-        symlink: this.useSymlink(),
-      })
+    if (active) {
+      const conflict = await this.checkUpstreamConflict()
+      if (conflict) {
+        return {
+          error: conflict,
+          activated: false,
+        }
+      }
     }
+
+    const error = await invoke<string>('plugin:windows|core_do_activate', {
+      active: active,
+      symlink: this.useSymlink(),
+    })
 
     return {
       error: error,

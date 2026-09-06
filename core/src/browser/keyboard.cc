@@ -2,13 +2,6 @@
 #include "include/capi/cef_client_capi.h"
 #include "include/capi/cef_keyboard_handler_capi.h"
 
-// BROWSER PROCESS ONLY.
-
-#ifndef OS_WIN
-#define VK_F12    0x7B
-#define VK_RETURN 0x0D
-#endif
-
 static decltype(cef_keyboard_handler_t::on_pre_key_event) OnPreKeyEvent;
 static int CEF_CALLBACK Hooked_OnPreKeyEvent(
     struct _cef_keyboard_handler_t* self,
@@ -18,13 +11,7 @@ static int CEF_CALLBACK Hooked_OnPreKeyEvent(
     int* is_keyboard_shortcut)
 {
     int code = event->windows_key_code;
-    bool ctrl_shift =
-#if OS_MAC
-        // use command + options (alt) on mac
-        (event->modifiers & (EVENTFLAG_COMMAND_DOWN | EVENTFLAG_ALT_DOWN));
-#else
-        (event->modifiers & (EVENTFLAG_CONTROL_DOWN | EVENTFLAG_SHIFT_DOWN));
-#endif
+    bool ctrl_shift = (event->modifiers & (EVENTFLAG_CONTROL_DOWN | EVENTFLAG_SHIFT_DOWN));
 
     if (event->focus_on_editable_field)
         goto _next;

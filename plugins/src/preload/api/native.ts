@@ -1,8 +1,10 @@
 // @ts-ignore
-export const native: Native = window.__native;
+export const native: Native = typeof window !== 'undefined' ? window.__native : ({} as any);
 
-// @ts-ignore
-delete window.__native;
+if (typeof window !== 'undefined') {
+  // @ts-ignore
+  delete window.__native;
+}
 
 interface Native {
   OpenDevTools: () => void;
@@ -14,4 +16,11 @@ interface Native {
 
   LoadDataStore: () => string;
   SaveDataStore: (data: string) => void;
+
+  LoadPluginStore?: (pluginName: string) => string;
+  SavePluginStore?: (pluginName: string, data: string) => void;
+  ReadPluginFile?: (pluginName: string, relPath: string) => string | null;
+  WritePluginFile?: (pluginName: string, relPath: string, content: string) => boolean;
+  PluginFileExists?: (pluginName: string, relPath: string) => boolean;
+  ListPluginFiles?: (pluginName: string, relDir?: string) => string[];
 }

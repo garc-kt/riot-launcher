@@ -1,0 +1,35 @@
+{
+  "name": "companion-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "build-fast": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@pinia/colada": "^1.4.4",
+    "@vee-validate/zod": "^4.13.2",
+    "floating-vue": "^5.2.2",
+    "lucide-vue-next": "^0.359.0",
+    "pinia": "^2.2.2",
+    "vee-validate": "^4.13.2",
+    "vue": "^3.4.38",
+    "vue-i18n": "^9.13.1",
+    "vue-router": "^4.4.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.16.1",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.41",
+    "sass": "^1.77.8",
+    "tailwindcss": "^3.4.10",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2",
+    "vue-tsc": "^2.1.4"
+  }
+}

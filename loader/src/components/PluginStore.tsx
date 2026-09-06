@@ -1,6 +1,5 @@
-import { Component, createSignal, onMount } from 'solid-js'
+import { Component } from 'solid-js'
 import { useRoot } from '~/lib/root'
-import { StoreManager } from '~/lib/store'
 
 export const PluginStore: Component = () => {
 

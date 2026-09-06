@@ -49,7 +49,7 @@ interface DataStore {
 interface ApplyEffectFn {
   (type: 'transparent' | 'blurbehind' | 'acrylic' | 'unified', options?: { color: string }): void
   (type: 'mica', options?: { material?: 'auto' | 'mica' | 'acrylic' | 'tabbed' }): void
-  (type: 'vibrancy', options: { material: string, alwaysOn?: boolean }): void
+  (type: 'vibrancy', options?: { material: string, alwaysOn?: boolean }): void
 }
 
 interface Effect {
@@ -71,11 +71,10 @@ declare interface Window {
     version: string
     superPotato: boolean
     plugins: string[]
-    isMac: boolean
   };
 
   os: {
-    name: 'win' | 'mac'
+    name: 'win'
     version: string
     build: string
   };

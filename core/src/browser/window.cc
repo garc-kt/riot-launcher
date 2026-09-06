@@ -70,7 +70,6 @@ void browser::setup_window(cef_browser_t *browser)
     if (browser::window) return;
     auto host = browser->get_host(browser);
 
-#if OS_WIN
     // Get needed windows.
     HWND browserWin = host->get_window_handle(host);
     // Retrieve top-level window (RCLIENT).
@@ -86,16 +85,12 @@ void browser::setup_window(cef_browser_t *browser)
     ShowWindow(browserWin, SW_HIDE);
     //   bring Chrome_WidgetWin_0 to top-level children
     SetParent(widgetWin, rclient);
-#elif OS_MAC
-    browser::window = host->get_window_handle(host);
-#endif
 
     window::set_theme(browser::window, true);
     window::enable_shadow(browser::window);
 
     if (config::options::silent_mode())
     {
-#if OS_WIN
         // LCUX calls ShowWindow to show itself
         Old_ShowWindow.hook(&ShowWindow, Hooked_ShowWindow);
         // it calls ShowWindow to make annoying topmost
@@ -106,7 +101,6 @@ void browser::setup_window(cef_browser_t *browser)
         SetWindowLongPtr(browser::window, GWLP_WNDPROC, (LONG_PTR)Hooked_WndProc);
         
         // note that post-game will not show the client window
-#endif
     }
 
     host->base.release(&host->base);

@@ -6,6 +6,6 @@ import App from './App'
 // @ts-ignore
 window.appVersion = __VERSION__
 // @ts-ignore
-window.isMac = __PLATFORM__ === 'darwin'
+window.isMac = false
 
 render(() => <App />, document.getElementById('root') as HTMLElement)

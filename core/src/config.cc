@@ -2,16 +2,10 @@
 #include <fstream>
 #include <unordered_map>
 
-#if OS_WIN
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-#elif OS_MAC
-#include <dlfcn.h>
-#include <libgen.h>
-#endif
 
 path config::loader_dir()
 {
-#if OS_WIN
     static std::wstring path;
     if (path.empty())
     {
@@ -41,18 +35,6 @@ path config::loader_dir()
         // Get parent folder.
         return path = dir.substr(0, dir.find_last_of(L"/\\"));
     }
-#elif OS_MAC
-    static std::string path;
-    if (path.empty())
-    {
-        Dl_info info;
-        if (dladdr((const void *)&loader_dir, &info))
-        {
-            path = info.dli_fname;
-            path = path.substr(0, path.rfind('/'));
-        }
-    }
-#endif
     return path;
 }
 
@@ -63,7 +45,6 @@ path config::datastore_path()
 
 path config::cache_dir()
 {
-#if OS_WIN
     wchar_t path[2048];
     size_t length = GetEnvironmentVariableW(L"LOCALAPPDATA", path, _countof(path));
 
@@ -72,23 +53,15 @@ path config::cache_dir()
 
     lstrcatW(path, L"\\Riot Games\\League of Legends\\Cache");
     return path;
-#else
-    // inside the RiotClient folder 
-    return "/Users/Shared/Riot Games/League Client/Cache";
-#endif
 }
 
 path config::league_dir()
 {
-#if OS_WIN
     wchar_t buf[2048];
     size_t length = GetModuleFileNameW(nullptr, buf, _countof(buf));
 
     std::wstring path(buf, length);
     return path.substr(0, path.find_last_of(L"/\\"));
-#else
-    return "";
-#endif
 }
 
 static void trim_tring(std::string &str)

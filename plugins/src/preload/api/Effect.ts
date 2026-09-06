@@ -1,30 +1,5 @@
 import { native } from './native';
 
-const NSVisualEffectMaterial = {
-  Titlebar: 3,
-  Selection: 4,
-  Menu: 5,
-  Popover: 6,
-  Sidebar: 7,
-  HeaderView: 10,
-  Sheet: 11,
-  WindowBackground: 12,
-  HudWindow: 13,
-  FullScreenUI: 15,
-  Tooltip: 17,
-  ContentBackground: 18,
-  UnderWindowBackground: 21,
-  UnderPageBackground: 22,
-}
-
-const WinToMacMaterial = {
-  transparent: NSVisualEffectMaterial.UnderWindowBackground,
-  blurbehind: NSVisualEffectMaterial.HudWindow,
-  acrylic: NSVisualEffectMaterial.FullScreenUI,
-  unified: NSVisualEffectMaterial.Popover,
-  mica: NSVisualEffectMaterial.HeaderView,
-}
-
 const Win11MicaMaterial = {
   auto: 0,
   none: 1,
@@ -71,30 +46,17 @@ function parseHexColor(color: string): number {
   return 0
 }
 
-function applyWindowEffectMac(name: EffectName, options) {
+function applyWindowEffectWin(name: EffectName, options: any) {
   if (name === 'vibrancy') {
-    const material = String(options.material)
-    const alwaysOn = Boolean(options.alwaysOn)
-    if (material in NSVisualEffectMaterial) {
-      const state = alwaysOn ? 1 : 0
-      native.SetWindowVibrancy(NSVisualEffectMaterial[material], state)
-    } else {
-      console.warn('Unsupported vibrancy material: %s', material)
-    }
+    console.warn('Vibrancy effect is a macOS-only feature not available on Windows.')
+    return
   }
-  else if (name in WinToMacMaterial) {
-    native.SetWindowVibrancy(WinToMacMaterial[name], 0)
-  } else {
-    console.warn('Unknown window visual effect: %s', name)
-  }
-}
 
-function applyWindowEffectWin(name: EffectName, options) {
   if (name in WinBackdropType) {
     if (name === 'mica') {
       const material = String(options.material || 'mica')
       if (material in Win11MicaMaterial) {
-        native.SetWindowVibrancy(WinBackdropType.mica, Win11MicaMaterial[material])
+        native.SetWindowVibrancy(WinBackdropType.mica, Win11MicaMaterial[material as keyof typeof Win11MicaMaterial])
       } else {
         console.warn('Unsupported mica material: %s', material)
       }
@@ -109,24 +71,20 @@ function applyWindowEffectWin(name: EffectName, options) {
 
 window.Effect = {
 
-  apply(name, options) {
+  apply(name: EffectName, options?: any) {
     options = options || {}
-    if (window.Pengu.isMac) {
-      applyWindowEffectMac(name, options)
-    } else {
-      applyWindowEffectWin(name, options)
-    }
+    applyWindowEffectWin(name, options)
   },
 
   clear() {
     native.SetWindowVibrancy(null);
   },
 
-  setTheme(theme) {
+  setTheme(theme: string) {
     if (theme === 'light')
       native.SetWindowTheme(false)
-    else (theme === 'dark')
-    native.SetWindowTheme(true)
+    else if (theme === 'dark')
+      native.SetWindowTheme(true)
   },
 
 }

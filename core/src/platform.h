@@ -8,12 +8,8 @@
 #ifndef OS_WIN
 #define OS_WIN 1
 #endif
-#elif defined(__APPLE__) || defined(__MACH__)
-#ifndef OS_MAC
-#define OS_MAC 1
-#endif
 #else
-#error "Your platform is not supported."
+#error "Windows is the only supported platform."
 #endif
 
 #if !(defined(_M_X64) || defined(_M_AMD64) || defined(__x86_64__) || defined(__amd64__))
@@ -32,13 +28,8 @@
 #define COUNT_OF(arr) (sizeof(arr) / sizeof(*arr))
 #endif
 
-#if OS_WIN
 #define PLATFORM_NAME "win"
 #define LIBCEF_MODULE_NAME "libcef.dll"
-#elif OS_MAC
-#define PLATFORM_NAME "mac"
-#define LIBCEF_MODULE_NAME "League of Legends.app/Contents/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework"
-#endif
 
 #ifndef NDEBUG
 #define _DEBUG 1

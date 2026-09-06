@@ -2,7 +2,7 @@ import { createSignal, onCleanup, onMount } from 'solid-js'
 import tippy, { type Instance as TippyInstance } from 'tippy.js'
 
 export function isMac() {
-  return /mac/i.test(navigator.platform)
+  return false
 }
 
 // fnv1a 32-bit
