@@ -157,6 +157,15 @@ importers:
         specifier: ^3.4.38
         version: 3.5.42(typescript@5.9.3)
 
+  personal/snooze:
+    dependencies:
+      '@riot/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@riot/lcu':
+        specifier: workspace:*
+        version: link:../../packages/lcu
+
   plugins:
     dependencies:
       '@riot/contracts':
