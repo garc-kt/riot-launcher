@@ -1,5 +1,5 @@
 {
-  "name": "@riot/app",
+  "name": "companion-app",
   "version": "1.0.4",
   "private": true,
   "type": "module",

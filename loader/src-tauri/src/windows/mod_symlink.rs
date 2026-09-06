@@ -47,6 +47,9 @@ pub fn do_activate(active: bool) -> ActivationResult {
     if let Some(link_path) = get_symlink_path() {
         if active {
             let orig_path = crate::config::core_path();
+            if link_path.exists() {
+                let _ = std::fs::remove_file(&link_path);
+            }
             match symlink_file(orig_path, link_path) {
                 Ok(()) => Ok(()),
                 Err(err) => Err((ActivationStage::CreateSymlink, err.kind())),

@@ -1,5 +1,5 @@
 {
-  "name": "@riot/plugins",
+  "name": "pengujs",
   "private": true,
   "version": "1.0.4",
   "type": "module",
