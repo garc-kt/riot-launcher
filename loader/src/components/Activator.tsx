@@ -1,7 +1,7 @@
 import { Component, createSignal, onMount } from 'solid-js'
 import { Dynamic } from 'solid-js/web'
 import { CoreModule } from '../lib/core-module'
-import { dialog, event } from '@tauri-apps/api'
+import { dialog } from '@tauri-apps/api'
 import { BoltIcon, PowerIcon } from './Icons'
 
 export const Activator: Component = () => {
@@ -42,39 +42,42 @@ export const Activator: Component = () => {
   onMount(async () => {
     setActive(await CoreModule.isActivated())
     setLoading(false)
-
-    if (window.isMac) {
-      event.listen('active-status', (e) => {
-        setActive(Boolean(e.payload))
-      })
-    }
   })
 
   return (
-    <div
-      class="fixed bottom-6 right-0 z-10 translate-x-28 hover:translate-x-0 transition-transform"
-    >
-      <div
-        class="flex items-center justify-between pl-3 shadow-lg w-44 h-14 rounded-l-full border border-neutral-700/30 border-r-0
-        cursor-pointer aria-disabled::cursor-not-allowed group bg-card aria-checked:bg-primary
-        hover:shadow-xl transition-colors ease-out duration-300"
-        aria-disabled={loading()}
-        aria-checked={active()}
+    <div class="fixed bottom-5 right-6 z-20">
+      <button
+        class="flex items-center gap-3 px-4 py-2 rounded-full border shadow-lg backdrop-blur-md transition-all duration-200 group cursor-pointer"
+        style={{ 'background-color': active() ? 'rgba(34, 197, 94, 0.12)' : 'rgba(44, 41, 55, 0.85)' }}
+        classList={{
+          'border-emerald-500/40 text-emerald-300 hover:border-emerald-400': active(),
+          'border-white/10 text-neutral-300 hover:border-white/25 hover:text-white': !active(),
+          'opacity-60 pointer-events-none': loading()
+        }}
         onClick={activate}
       >
-        <div
-          class="flex items-center justify-center size-8 text-primary rounded-full group-hover:bg-primary
-          aria-checked:bg-muted group-hover:text-accent group-hover:aria-checked:bg-muted group-hover:aria-checked:text-primary"
-          aria-checked={active()}>
-          <span class="group-hover:animate-pulse">
-            <Dynamic component={active() ? BoltIcon : PowerIcon} thickness={2.5} />
-          </span>
+        <span
+          class="size-2 rounded-full transition-all duration-300"
+          classList={{
+            'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse': active(),
+            'bg-neutral-500': !active()
+          }}
+        />
+
+        <div class="flex items-center gap-1.5 text-xs font-semibold tracking-wide uppercase">
+          <Dynamic component={active() ? BoltIcon : PowerIcon} size={14} thickness={2.2} />
+          <span>{active() ? 'Client Hooked' : 'Activate Loader'}</span>
         </div>
-        <div
-          class="flex-1 px-6 text-lg text-center font-semibold text-primary aria-checked:text-muted"
-          aria-checked={active()}
-        >{active() ? 'READY' : 'Activate'}</div>
-      </div>
+
+        <span class="text-[10px] px-2 py-0.5 rounded-full font-mono font-normal"
+          classList={{
+            'bg-emerald-500/20 text-emerald-200': active(),
+            'bg-white/5 text-neutral-400': !active()
+          }}
+        >
+          {active() ? 'LIVE' : 'IDLE'}
+        </span>
+      </button>
     </div>
   )
 }

@@ -3,32 +3,50 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: 33 36 41;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 34 197 94;
-    --primary-foreground: 144.9 80.4% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 0 0% 98%;
+  :root, .theme-cosmic {
+    --background: 251 14% 15%; /* #23212C */
+    --foreground: 250 20% 97%;
+    --card: 44 41 55; /* #2C2937 */
+    --card-foreground: 250 20% 97%;
+    --popover: 251 14% 13%;
+    --popover-foreground: 250 20% 97%;
+    --primary: 167 139 250; /* Cosmic violet #a78bfa */
+    --primary-foreground: 35 33 44;
+    --secondary: 253 15% 22%;
+    --secondary-foreground: 250 20% 97%;
+    --muted: 253 14% 19%;
+    --muted-foreground: 252 10% 65%;
+    --accent: 253 15% 24%;
+    --accent-foreground: 250 20% 97%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 142.4 71.8% 29.2%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --radius: 0.5rem;
+    --border: 252 12% 24%;
+    --input: 252 12% 24%;
+    --ring: 255 90% 75%;
+    --radius: 0.6rem;
+  }
+
+  .theme-vanilla {
+    --background: 74 93% 89%; /* #F1FEC8 - RGB 241, 254, 200 */
+    --foreground: 251 14% 15%; /* #23212C deep text */
+    --card: 255 255 255; /* Clean crisp white cards */
+    --card-foreground: 251 14% 15%;
+    --popover: 74 80% 94%;
+    --popover-foreground: 251 14% 15%;
+    --primary: 251 14% 20%; /* Deep contrast brand primary */
+    --primary-foreground: 241 254 200;
+    --secondary: 74 45% 85%;
+    --secondary-foreground: 251 14% 15%;
+    --muted: 74 40% 86%;
+    --muted-foreground: 251 10% 40%;
+    --accent: 74 60% 86%;
+    --accent-foreground: 251 14% 15%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 74 35% 80%;
+    --input: 74 35% 80%;
+    --ring: 251 14% 20%;
+    --radius: 0.6rem;
   }
 }
 
@@ -39,7 +57,9 @@
 
   body {
     @apply bg-background text-foreground select-none;
-    font-feature-settings: "rlig" 1, ss"calt" 1;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    letter-spacing: -0.01em;
   }
 }
 
@@ -51,61 +71,36 @@
   -webkit-text-size-adjust: 100%;
 }
 
-body {
-  background-color: #212429;
+body, body.theme-cosmic {
+  background-color: #23212C;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(167, 139, 250, 0.05) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.03) 0%, transparent 50%);
   position: relative;
+  overflow: hidden;
 }
 
-body::before {
-  content: '';
-  position: absolute;
-  /* background-color: #0002; */
-  background-image: url(./assets/bg-mask.svg);
-  background-size: cover;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  z-index: -1;
-}
-
-body::after {
-  content: '';
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  z-index: -1;
-  border: solid 1px #484a4e20;
-}
-
-.pengu-activ {
-  z-index: 2;
-  transition: ease-in-out all .3s;
-  pointer-events: none;
-}
-
-.pengu-status {
-  z-index: 1;
-  transition: ease-in-out all .2s;
-}
-
-.active .pengu-activ {
-  transform: translateX(5rem) rotate(360deg);
-}
-
-.active .pengu-status {
-  transform: translateX(-2.2rem);
+body.theme-vanilla {
+  background-color: #F1FEC8;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.6) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(215, 235, 155, 0.3) 0%, transparent 50%);
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
   background: transparent;
-  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-500 rounded-md;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
 }

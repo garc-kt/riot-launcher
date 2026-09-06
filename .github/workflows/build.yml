@@ -4,7 +4,12 @@ on:
       - main
       - dev
       - release/*
+    tags:
+      - 'v*'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -78,6 +83,17 @@ jobs:
             cp "loader/src-tauri/target/release/pengu-loader.exe" bin/
           fi
 
+      - name: Package Release Zip
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          if [ -z "$TAG_NAME" ] || [ "$TAG_NAME" = "$GITHUB_REF" ]; then
+            TAG_NAME="v${APP_VERSION}-dev-${SHORT_SHA}"
+          fi
+          ZIP_NAME="riot-loader-${TAG_NAME}-windows-x64.zip"
+          echo "ZIP_NAME=${ZIP_NAME}" >> $GITHUB_ENV
+          cd bin
+          7z a "../bin/${ZIP_NAME}" "Riot Loader.exe" "core.dll"
+
       - name: Upload build output
         uses: actions/upload-artifact@v4
         with:
@@ -85,3 +101,17 @@ jobs:
           path: |
             bin/
             !bin/obj/
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            bin/${{ env.ZIP_NAME }}
+            bin/Riot Loader.exe
+            bin/core.dll
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

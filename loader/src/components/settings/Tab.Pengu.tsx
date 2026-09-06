@@ -1,4 +1,4 @@
-import { Component, createSignal, onMount, Show } from 'solid-js'
+import { Component, createSignal, onMount } from 'solid-js'
 import { dialog } from '@tauri-apps/api'
 import { Config, useConfig } from '~/lib/config'
 import { LeagueClient } from '~/lib/league-client'
@@ -7,23 +7,23 @@ import { ActivationMode, CoreModule } from '~/lib/core-module'
 import { Startup } from '~/lib/startup'
 
 const LaunchSettings: Component = () => {
-  const [startup, setSatrtup] = createSignal(false)
+  const [startup, setStartup] = createSignal(false)
 
   const toggleStartup = async () => {
     let enable = !await Startup.isEnabled()
     await Startup.setEnable(enable)
-    setSatrtup(enable)
+    setStartup(enable)
   }
 
   onMount(async () => {
-    setSatrtup(await Startup.isEnabled())
+    setStartup(await Startup.isEnabled())
   })
 
   return (
     <OptionSet name="Launch Settings">
       <CheckOption
         caption="Run on startup"
-        message="Automatically run Pengu when your computer starts."
+        message="Automatically run Riot Loader when your computer starts."
         checked={startup()}
         onClick={toggleStartup}
       />
@@ -31,7 +31,7 @@ const LaunchSettings: Component = () => {
   )
 }
 
-export const TabPengu: Component = () => {
+export const TabLoader: Component = () => {
 
   const { app } = useConfig()
 
@@ -48,7 +48,7 @@ export const TabPengu: Component = () => {
 
   const setActivationMode = async (mode: ActivationMode) => {
     if (await CoreModule.isActivated()) {
-      await dialog.message('Please deactivate Pengu before changing the activation mode.', { type: 'warning' })
+      await dialog.message('Please deactivate Riot Loader before changing the activation mode.', { type: 'warning' })
     } else {
       await app.activation_mode(mode)
     }
@@ -71,53 +71,41 @@ export const TabPengu: Component = () => {
   return (
     <div class="space-y-4">
 
+      <LaunchSettings />
+
       <OptionSet name="Plugins Folder">
         <span
-          class="block text-base text-neutral-200 px-3 py-1 hover:bg-neutral-400/20 rounded-md"
+          class="block text-sm text-neutral-200 px-3 py-1.5 hover:bg-white/5 rounded-md cursor-pointer border border-white/5 transition-colors"
           onClick={changePluginsDir}>
           {app.plugins_dir() || './plugins'}
         </span>
       </OptionSet>
 
-      <Show when={!window.isMac}>
-        <OptionSet name="LoL Client Location" disabled={app.activation_mode() === ActivationMode.Universal}>
-          <span
-            class="block text-base text-neutral-200 px-3 py-1 hover:bg-neutral-400/20 rounded-md"
-            onClick={changeLeagueDir}>
-            {app.league_dir() || '(not selected)'}
-          </span>
-        </OptionSet>
-      </Show>
-
-      <Show when={window.isMac}>
-        <LaunchSettings />
-      </Show>
+      <OptionSet name="LoL Client Location" disabled={app.activation_mode() === ActivationMode.Universal}>
+        <span
+          class="block text-sm text-neutral-200 px-3 py-1.5 hover:bg-white/5 rounded-md cursor-pointer border border-white/5 transition-colors"
+          onClick={changeLeagueDir}>
+          {app.league_dir() || '(not selected)'}
+        </span>
+      </OptionSet>
 
       <OptionSet name="Activation Mode">
-        <Show when={!window.isMac}>
-          <RadioOption
-            caption="Universal"
-            message="Apply to all League Clients, including live and PBE."
-            checked={app.activation_mode() === ActivationMode.Universal}
-            onClick={() => setActivationMode(ActivationMode.Universal)}
-          />
-          <RadioOption
-            caption="Targeted"
-            message="Apply to a specific League Client that you choose. Use it if you get access denied in Universal mode, except the Tencent server."
-            checked={app.activation_mode() === ActivationMode.Targeted}
-            onClick={() => setActivationMode(ActivationMode.Targeted)}
-          />
-        </Show>
-        <Show when={window.isMac}>
-          <RadioOption
-            caption="On-demand"
-            message="Apply to a specific League Client that you launch from the Riot Client. You have to keep Pengu running in background."
-            disabled
-            checked
-          />
-        </Show>
+        <RadioOption
+          caption="Universal"
+          message="Apply to all League Clients, including live and PBE."
+          checked={app.activation_mode() === ActivationMode.Universal}
+          onClick={() => setActivationMode(ActivationMode.Universal)}
+        />
+        <RadioOption
+          caption="Targeted"
+          message="Apply to a specific League Client that you choose. Use it if you get access denied in Universal mode, except the Tencent server."
+          checked={app.activation_mode() === ActivationMode.Targeted}
+          onClick={() => setActivationMode(ActivationMode.Targeted)}
+        />
       </OptionSet>
 
     </div>
   )
 }
+
+export const TabPengu = TabLoader

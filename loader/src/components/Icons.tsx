@@ -41,6 +41,31 @@ export const PluginIcon: Component<IconProps> = (props) => (
   </Svg>
 )
 
+export const PaletteIcon: Component<IconProps> = (props) => (
+  <Svg {...props}>
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -.5 1.25a2 2 0 0 1 -1.5 .5z" />
+    <path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+    <path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+    <path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+  </Svg>
+)
+
+export const SunIcon: Component<IconProps> = (props) => (
+  <Svg {...props}>
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+    <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
+  </Svg>
+)
+
+export const MoonIcon: Component<IconProps> = (props) => (
+  <Svg {...props}>
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+  </Svg>
+)
+
 export const StoreIcon: Component<IconProps> = (props) => (
   <Svg {...props}>
     <path stroke="none" d="M0 0h24v24H0z" fill="none" />

@@ -81,18 +81,15 @@ export function Welcome() {
                     <img src={penguLogo} class="w-10 h-10 rounded" alt="" />
                   </div>
                   <div class="ml-4 mt-0 text-left">
-                    <h3 class="text-base mt-0 font-semibold leading-6 text-gray-900">Pengu Loader</h3>
+                    <h3 class="text-base mt-0 font-semibold leading-6 text-gray-900">Riot Loader</h3>
                     <div class="mt-2">
                       <div class="text-sm text-black">{_t('welcome_msg')}</div>
                       <div class="flex mt-5 space-x-1">
-                        <a href="https://chat.pengu.lol/" target="_blank" rel="noreferrer" class="opacity-90 hover:opacity-100">
-                          <img src="https://img.shields.io/discord/1069483280438673418?style=flat-square&logo=discord&logoColor=white&label=discord&color=5c5fff" alt="" />
+                        <a href="https://github.com/garc-kt/riot-launcher" target="_blank" rel="noreferrer" class="opacity-90 hover:opacity-100">
+                          <img src="https://img.shields.io/github/stars/garc-kt/riot-launcher?style=flat-square&logo=github" alt="" />
                         </a>
-                        <a href="https://pengu.lol/" target="_blank" rel="noreferrer" class="opacity-90 hover:opacity-100">
-                          <img src="https://img.shields.io/badge/-pengu.lol-607080.svg?&style=flat-square&logo=gitbook&logoColor=white" alt="" />
-                        </a>
-                        <a href="https://github.com/PenguLoader/PenguLoader/" target="_blank" rel="noreferrer" class="opacity-90 hover:opacity-100">
-                          <img src="https://img.shields.io/github/stars/PenguLoader/PenguLoader?style=flat-square&logo=github" alt="" />
+                        <a href="https://github.com/PenguLoader/PenguLoader/" target="_blank" rel="noreferrer" class="opacity-90 hover:opacity-100" title="Upstream Pengu Loader">
+                          <img src="https://img.shields.io/badge/upstream-penguloader-607080.svg?style=flat-square&logo=github" alt="" />
                         </a>
                       </div>
                     </div>

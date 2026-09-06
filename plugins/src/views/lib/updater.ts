@@ -1,6 +1,6 @@
 import snarkdown from 'snarkdown';
 
-const GITHUB_REPO = 'PenguLoader/PenguLoader';
+const GITHUB_REPO = 'garc-kt/riot-launcher';
 
 function parseVersion(version: string) {
   const match = /v?(\d+(?:\.\d+){2,3})/i.exec(version);
@@ -25,7 +25,7 @@ export async function fetchUpdate() {
       };
     }
   } catch (err) {
-    console.warn('Pengu failed to fetch update.', err);
+    console.warn('Riot Loader failed to fetch update.', err);
   }
   return false;
 }

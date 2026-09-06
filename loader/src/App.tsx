@@ -17,11 +17,7 @@ function App() {
   })
 
   return (
-    <div class="h-screen flex flex-col">
-      <div class="blur-[140px] h-[10rem] max-w-[40rem] absolute top-[10rem] z-10 pointer-events-none w-[-webkit-fill-available]">
-        <div class="w-full h-full bg-[linear-gradient(97.62deg,rgba(0,71,225,0.22),rgba(26,214,255,0.32),rgba(0,220,130,0.42))]">
-        </div>
-      </div>
+    <div class="h-screen flex flex-col bg-[#090a0f] text-slate-100 selection:bg-sky-500/30">
       <Show when={ready()}>
         <Appbar isHome={!welcome()} />
         <Show

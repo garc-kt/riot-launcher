@@ -1,7 +1,7 @@
-# Riot Loader
-
 <div align="center">
-  <h3>⚡ The native League of Legends client companion platform & loader.</h3>
+  <img src="./assets/riot-loader.png" width="240" alt="Riot Loader Logo" />
+  <h1>Riot Loader</h1>
+  <p><b>⚡ The native League of Legends client companion platform & loader</b></p>
   <p>
     A high-performance Win32 loader and companion platform featuring native constructable theming, runtime extensions, and a built-in Vue 3 companion experience.
   </p>

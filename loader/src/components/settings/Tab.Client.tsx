@@ -14,7 +14,7 @@ export const TabClient: Component = () => {
       <OptionSet name="Hot Keys">
         <CheckOption
           caption="Enable hot keys"
-          message="Allow Pengu to catch these hot keys when you press in the Client to perform functions below."
+          message="Allow Riot Loader to catch these hot keys when you press in the Client to perform functions below."
           checked={client.use_hotkeys()}
           onChange={client.use_hotkeys}
         />
@@ -32,6 +32,10 @@ export const TabClient: Component = () => {
             <span>/</span>
             <kbd class="px-2 py-0.5 rounded-sm text-xs bg-neutral-500/30">F12</kbd>
             <p class="text-sm text-neutral-400">Open Chrome DevTools</p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <kbd class="px-2 py-0.5 rounded-sm text-xs bg-rose-500/20 text-rose-300 font-mono">Ctrl Shift Alt K</kbd>
+            <p class="text-sm text-neutral-400">Emergency panic kill-switch (suspend all plugins)</p>
           </div>
         </div>
       </OptionSet>

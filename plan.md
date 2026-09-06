@@ -130,7 +130,7 @@ Then strip in place:
 
 ## 3. Layer 2 — `launcher/` (Tauri desktop app)
 
-Upstream's is Tauri 1 + React + Tailwind, with system tray, dialogs, and filesystem write access. Ours takes on more: it is also the standalone companion window.
+Upstream's is Tauri 1 + SolidJS + Tailwind, with system tray, dialogs, and filesystem write access. Ours takes on more: it is also the standalone companion window.
 
 Responsibilities:
 - Install / uninstall the injection hook — Windows registry work (IFEO) plus placing the proxied DLL next to the client. **This is the piece that needs elevation and breaks most often across OS updates.**

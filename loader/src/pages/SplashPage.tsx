@@ -1,17 +1,18 @@
 import { Component } from 'solid-js'
 import { LoaderIcon } from '~/components/Icons'
+import icon from '~/assets/icon.png'
 
 export const SplashPage: Component = () => {
   return (
-    <div class="flex justify-center items-center h-screen">
-      <div class="flex flex-col items-center gap-4">
-        <img class="size-32 rounded-full pointer-events-none" src="/pengu-xl.jpg" />
-        {/* <h2 class="text-3xl font-semibold text-white">Pengu Loader</h2> */}
-        <p class="text-lg text-slate-200 flex items-center">
-          ✨ Build your unmatched <img class="mx-1 size-6 inline-block" src="/lol-logo.png" /> Client
-        </p>
-        <span class="animate-spin">
-          <LoaderIcon thickness={1} />
+    <div class="flex justify-center items-center h-screen bg-[#090a0f]">
+      <div class="flex flex-col items-center gap-5">
+        <img class="size-28 rounded-2xl shadow-2xl shadow-cyan-500/10 pointer-events-none" src={icon} alt="Riot Loader" />
+        <div class="text-center">
+          <h2 class="text-2xl font-bold tracking-tight text-white">Riot Loader</h2>
+          <p class="text-xs text-neutral-400 mt-1 uppercase tracking-widest font-mono">Companion Platform</p>
+        </div>
+        <span class="animate-spin text-sky-400 mt-2">
+          <LoaderIcon thickness={1.5} />
         </span>
       </div>
     </div>
