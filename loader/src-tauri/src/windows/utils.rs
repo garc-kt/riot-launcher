@@ -139,13 +139,25 @@ pub fn detect_upstream_conflict() -> Option<String> {
         }
     }
 
+    let is_our_or_riot = |s: &str| -> bool {
+        let l = s.to_lowercase();
+        l.contains("riot-loader")
+            || l.contains("riot loader")
+            || l.contains("riot_loader")
+            || l.contains("riot-launcher")
+            || l.contains("antigravity\\loader")
+            || l.contains("antigravity/loader")
+            || l.ends_with("\\loader\\bin\\core.dll")
+            || l.ends_with("/loader/bin/core.dll")
+    };
+
     let hklm = RegKey::predef(HKEY_LOCAL_MACHINE);
     let ifeo_path = r"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LeagueClientUx.exe";
     if let Ok(key) = hklm.open_subkey_with_flags(ifeo_path, KEY_READ) {
         if let Ok(val) = key.get_value("Debugger") as Result<String, Error> {
             let lower = val.to_lowercase();
             let our_core = crate::config::core_path().display().to_string().to_lowercase();
-            let is_riot = lower.contains("riot-loader") || lower.contains("riot loader") || lower.contains("riot_loader");
+            let is_riot = is_our_or_riot(&lower);
             if lower.contains("pengu") || (lower.starts_with("rundll32") && !lower.contains(&our_core) && !is_riot) {
                 return Some(format!(
                     "Detected conflicting IFEO debugger entry: \"{}\". Please uninstall existing loader before activating Riot Loader.",
@@ -162,7 +174,7 @@ pub fn detect_upstream_conflict() -> Option<String> {
             if proxy_path.exists() {
                 if let Ok(target) = std::fs::read_link(&proxy_path) {
                     let target_str = target.display().to_string().to_lowercase();
-                    let is_riot = target_str.contains("riot-loader") || target_str.contains("riot loader") || target_str.contains("riot_loader");
+                    let is_riot = is_our_or_riot(&target_str);
                     if target != our_core && !is_riot {
                         return Some(format!(
                             "Detected conflicting proxy DLL at \"{}\" pointing to \"{}\". Please remove it before proceeding.",
@@ -173,7 +185,7 @@ pub fn detect_upstream_conflict() -> Option<String> {
                 } else if let Ok(canon) = proxy_path.canonicalize() {
                     if let Ok(our_canon) = our_core.canonicalize() {
                         let canon_str = canon.display().to_string().to_lowercase();
-                        let is_riot = canon_str.contains("riot-loader") || canon_str.contains("riot loader") || canon_str.contains("riot_loader");
+                        let is_riot = is_our_or_riot(&canon_str);
                         if canon != our_canon && !is_riot {
                             return Some(format!(
                                 "Detected conflicting proxy DLL at \"{}\". Please remove it before proceeding.",

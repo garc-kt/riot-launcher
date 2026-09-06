@@ -42,11 +42,25 @@ export function detectUpstreamConflict(options: ConflictCheckOptions = {}): stri
     }
   }
 
+  const isOurOrRiot = (s: string): boolean => {
+    const l = s.toLowerCase()
+    return (
+      l.includes('riot-loader') ||
+      l.includes('riot loader') ||
+      l.includes('riot_loader') ||
+      l.includes('riot-launcher') ||
+      l.includes('antigravity\\loader') ||
+      l.includes('antigravity/loader') ||
+      l.endsWith('\\loader\\bin\\core.dll') ||
+      l.endsWith('/loader/bin/core.dll')
+    )
+  }
+
   // 2. Check IFEO debugger entry
   if (ifeoDebugger) {
     const lower = ifeoDebugger.toLowerCase()
     const ourCoreLower = ourCorePath.toLowerCase()
-    const isRiotLoader = lower.includes('riot-loader') || lower.includes('riot loader') || lower.includes('riot_loader')
+    const isRiotLoader = isOurOrRiot(lower)
     if (lower.includes('pengu') || (lower.startsWith('rundll32') && !lower.includes(ourCoreLower) && !isRiotLoader)) {
       return `Detected conflicting IFEO debugger entry: "${ifeoDebugger}". Please uninstall existing loader before activating Riot Loader.`
     }
@@ -56,7 +70,7 @@ export function detectUpstreamConflict(options: ConflictCheckOptions = {}): stri
   if (leagueProxyDllTarget) {
     const targetNorm = leagueProxyDllTarget.toLowerCase().replace(/\//g, '\\')
     const ourNorm = ourCorePath.toLowerCase().replace(/\//g, '\\')
-    const isRiotLoader = targetNorm.includes('riot-loader') || targetNorm.includes('riot loader') || targetNorm.includes('riot_loader')
+    const isRiotLoader = isOurOrRiot(targetNorm)
     if (targetNorm !== ourNorm && !isRiotLoader) {
       return `Detected conflicting proxy DLL pointing to "${leagueProxyDllTarget}". Please remove it before proceeding.`
     }
