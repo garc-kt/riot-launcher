@@ -68,7 +68,11 @@ jobs:
       - name: Move loader output (windows)
         run: |
           mkdir -p bin
-          if [ -f "loader/src-tauri/target/release/Pengu Loader.exe" ]; then
+          if [ -f "loader/src-tauri/target/release/Riot Loader.exe" ]; then
+            cp "loader/src-tauri/target/release/Riot Loader.exe" bin/
+          elif [ -f "loader/src-tauri/target/release/riot-loader.exe" ]; then
+            cp "loader/src-tauri/target/release/riot-loader.exe" bin/
+          elif [ -f "loader/src-tauri/target/release/Pengu Loader.exe" ]; then
             cp "loader/src-tauri/target/release/Pengu Loader.exe" bin/
           elif [ -f "loader/src-tauri/target/release/pengu-loader.exe" ]; then
             cp "loader/src-tauri/target/release/pengu-loader.exe" bin/
@@ -77,7 +81,7 @@ jobs:
       - name: Upload build output
         uses: actions/upload-artifact@v4
         with:
-          name: companion-loader-v${{ env.APP_VERSION }}-dev-${{ env.SHORT_SHA }}-windows
+          name: riot-loader-v${{ env.APP_VERSION }}-dev-${{ env.SHORT_SHA }}-windows
           path: |
             bin/
             !bin/obj/

@@ -1,7 +1,7 @@
 [package]
-name = "pengu-loader"
-version = "1.2.0"
-description = "Pengu Loader app"
+name = "riot-loader"
+version = "1.0.0"
+description = "Riot Loader app"
 edition = "2021"
 license = "MIT"
 repository = "https://github.com/PenguLoader/PenguLoader"

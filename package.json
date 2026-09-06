@@ -1,19 +1,19 @@
 {
-  "name": "lol-companion-platform",
+  "name": "riot-loader",
   "version": "1.0.0",
   "private": true,
-  "description": "LoL Companion Platform & Native Loader",
+  "description": "Riot Loader — LoL Client Companion Platform & Native Loader (Fork of Pengu Loader)",
   "type": "module",
   "packageManager": "pnpm@9.15.1",
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "build": "pnpm --filter pengujs build && pnpm --filter pengu-loader build && pnpm --filter companion-app build",
+    "build": "pnpm --filter pengujs build && pnpm --filter riot-loader build && pnpm --filter companion-app build",
     "build:plugins": "pnpm --filter pengujs build",
-    "build:loader": "pnpm --filter pengu-loader build",
+    "build:loader": "pnpm --filter riot-loader build",
     "build:app": "pnpm --filter companion-app build",
-    "typecheck": "pnpm --filter pengujs exec tsc --noEmit && pnpm --filter pengu-loader exec tsc --noEmit && pnpm --filter companion-app exec vue-tsc --noEmit",
+    "typecheck": "pnpm --filter pengujs exec tsc --noEmit && pnpm --filter riot-loader exec tsc --noEmit && pnpm --filter companion-app exec vue-tsc --noEmit",
     "dev:app": "pnpm --filter companion-app dev",
-    "dev:loader": "pnpm --filter pengu-loader dev",
+    "dev:loader": "pnpm --filter riot-loader dev",
     "dev:plugins": "pnpm --filter pengujs dev"
   }
 }

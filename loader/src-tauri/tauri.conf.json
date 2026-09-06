@@ -6,8 +6,8 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "Pengu Loader",
-    "version": "1.2.0"
+    "productName": "Riot Loader",
+    "version": "1.0.0"
   },
   "tauri": {
     "allowlist": {
@@ -75,7 +75,7 @@
       }
     },
     "systemTray": {
-      "title": "Pengu Loader",
+      "title": "Riot Loader",
       "iconPath": "icons/icon.png",
       "iconAsTemplate": false
     },
@@ -85,7 +85,7 @@
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.pengu.lol",
+      "identifier": "com.riot.loader",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",

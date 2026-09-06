@@ -178,7 +178,7 @@ pub fn do_entry() {
                 "WebView2 is not installed on your system.\n\
                 Please install WebView2 to run the app.\0"
                     .as_ptr(),
-                "Pengu Loader\0".as_ptr(),
+                "Riot Loader\0".as_ptr(),
                 0x30,
             );
         }

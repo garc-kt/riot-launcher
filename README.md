@@ -1,62 +1,122 @@
-<br>
+# Riot Loader
 
 <div align="center">
-  <a href="https://pengu.lol">
-    <img src="https://i.imgur.com/kQOMxqS.jpg" width="144"/>
-  </a>
-  <h1 align="center">Pengu Loader</h1>
-  <p align="center">
-    ✨ The ultimate JavaScript plugin loader, build your unmatched LoL Client.
+  <h3>⚡ The native League of Legends client companion platform & loader.</h3>
+  <p>
+    A high-performance Win32 loader and companion platform featuring native constructable theming, runtime extensions, and a built-in Vue 3 companion experience.
   </p>
-  <p align="center">
-    <a href="https://chat.pengu.lol">
-      <img src ="https://img.shields.io/discord/1069483280438673418?style=for-the-badge&logo=discord&logoColor=white&color=5c5fff"/>
+  <p>
+    <a href="https://github.com/garc-kt/riot-launcher/releases/latest">
+      <img src="https://img.shields.io/github/v/release/garc-kt/riot-launcher?style=for-the-badge&color=blue" alt="Release" />
     </a>
-    <a href="https://github.com/PenguLoader/PenguLoader/releases/latest">
-      <img src="https://img.shields.io/github/downloads/PenguLoader/PenguLoader/total?style=for-the-badge" />
+    <a href="LICENSE">
+      <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License: MIT" />
     </a>
-    <a href="https://github.com/PenguLoader/PenguLoader">
-      <img src="https://img.shields.io/github/stars/PenguLoader/PenguLoader.svg?style=for-the-badge&logo=github" />
+    <a href="https://github.com/garc-kt/riot-launcher/actions">
+      <img src="https://img.shields.io/badge/Platform-Windows%20x64-0078D6.svg?style=for-the-badge&logo=windows" alt="Platform: Windows x64" />
     </a>
   </p>
 </div>
 
-<br>
+---
 
-## About
+## 📌 Upstream Attribution & Fork Statement
 
-**Pengu Loader** — formerly League Loader — is a powerful plugin loader tailored for the **League of Legends Client**, enabling limitless customization and personalization.
-With Pengu Loader, you can seamlessly load JavaScript plugins directly into the Client, allowing you to transform its appearance, add unique features, and integrate custom content to enhance your overall experience.
+**Riot Loader** is an enhanced, Win32-dedicated fork of [**Pengu Loader**](https://github.com/PenguLoader/PenguLoader) (`Copyright (c) 2024 Pengu Loader`, licensed under the **MIT License**).
 
-## Features
+Upstream Pengu Loader established the foundation for injecting JavaScript into the League of Legends client shell. **Riot Loader** diverges into an integrated companion ecosystem—rebuilding the preload engine with native constructable theming, embedding a first-party Vue 3 companion application, enforcing match safety rules, and providing backward-compatible additive extensions.
 
-- **Plugin support** to customize the League Client
-- **Personalize & theme** with flexible web stacks
-- **Modern JavaScript** compatibility
-- **Built-in DevTools** for easier debugging
-- **Simplified API** access and hooks
+---
 
-## Getting Started
+## ✨ Key Features & Architecture
 
-Please visit the homepage to begin:
+### 1. Built-in First-Party Companion (`app/`)
+- **Modern Reactive Stack**: Vue 3 (Composition API), Vite, Pinia, `@pinia/colada`, and Tailwind CSS.
+- **Runtime Validation**: All LCU and SGP payloads are parsed through Zod schemas to safeguard against Riot patch changes.
+- **Match Safety Posture (§0 & §4.5)**: Automatically unmounts DOM and suspends all network polling when game phase enters `InProgress`.
+- **Emergency Kill-Switch**: Global panic hotkey (`Ctrl+Shift+Alt+K`) to immediately and permanently deactivate the companion.
 
-### 👉 https://pengu.lol/
+### 2. Native Constructable Theming Engine (§7)
+- **Zero Flash-of-Unstyled-Content (FOUC)**: Installed in preload before client Web Components instantiate.
+- **Shadow DOM Penetration**: Uses shared constructable stylesheets adopted by every shadow root as it is created.
+- **Iframe Synchronization**: Listens for dynamic iframes via `MutationObserver` and injects isolated styles.
+- **Rule Extraction**: Automatically splits `@import` and `@font-face` rules into document-level head styles to avoid CEF constructable stylesheet quirks.
 
-## Disclaimer
+### 3. Additive Runtime Extensions (`context.ext`)
+Maintains 100% backward compatibility with existing upstream plugins (`rcp`, `socket`, `meta`, and `window.DataStore`), while introducing modern APIs:
+- `context.ext.store`: Scoped, non-blocking per-plugin key-value storage.
+- `context.ext.fs`: Scoped filesystem virtual read/write access.
+- `context.ext.commands`: Command palette registration bridge.
+- `context.ext.theme`: Programmatic theme control API.
 
-THE PROGRAM IS PROVIDED “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF MERCHANTABILITY, NONINFRINGMENT, OR OF FITNESS FOR A PARTICULAR PURPOSE. LICENSOR DOES NOT WARRANT THAT THE FUNCTIONS CONTAINED IN THE PROGRAM WILL MEET YOUR REQUIREMENTS OR THAT OPERATION WILL BE UNINTERRUPTED OR ERROR FREE. LICENSOR MAKES NO WARRANTIES RESPECTING ANY HARM THAT MAY BE CAUSED BY MALICIOUS USE OF THIS SOFTWARE. LICENSOR FURTHER EXPRESSLY DISCLAIMS ANY WARRANTY OR REPRESENTATION TO AUTHORIZED USERS OR TO ANY THIRD PARTY.
+### 4. Upstream Coexistence Protection (§9.1)
+- Built-in detection in both Rust and TypeScript checking for active PenguLoader installations, IFEO debuggers, or conflicting proxy DLLs.
+- Refuses to install over existing loaders to prevent half-broken client states.
 
-Pengu Loader isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
+### 5. Streamlined Win32 Architecture
+- **Windows-Only Focus**: Removed dead macOS branches, Objective-C++ sources (`cocoa.mm`), and conditional compiler overhead.
+- **Modern WebView2 Detection**: Native support for modern Edge WebView2 Evergreen runtimes (`msedgewebview2.exe`).
 
-## Sponsors
+---
 
-<table>
-  <tr>
-    <td><img src="https://github.com/user-attachments/assets/58e9a6f4-6630-437d-a758-b284c0ed41e7" /></td>
-    <td>Free code signing on Windows provided by <a href="https://about.signpath.io">SignPath.io</a>, certificate by <a href="https://signpath.org">SignPath Foundation</a></td>
-  </tr>
-</table>
+## 📦 Project Structure
 
-## License: MIT
+```
+riot-loader/
+├── app/                  # Injected Vue 3 companion application
+├── core/                 # Win32 C++20 CEF hook & proxy injector (outputs core.dll)
+├── loader/               # Tauri desktop launcher application
+├── plugins/              # Preload runtime bundle & theming engine (outputs preload.js & preload.g.h)
+├── tests/                # Automated unit test suites
+└── .github/workflows/    # Continuous Integration & release pipeline
+```
 
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fnomi-san%2Fleague-loader.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fnomi-san%2Fleague-loader?ref=badge_large)
+---
+
+## 🛠️ Development & Building
+
+The repository is organized as a unified **pnpm workspace monorepo**.
+
+### Prerequisites
+- **Node.js** >= 20 (Node 22 recommended)
+- **pnpm** >= 9
+- **Visual Studio Build Tools 2022** (with C++ Desktop workload) — *for building `core.dll`*
+- **Rust** (stable) — *for building the Tauri desktop launcher*
+
+### Quick Commands
+
+```bash
+# 1. Install all dependencies across workspaces
+pnpm install
+
+# 2. Run the unit test suite (coexistence, schemas, passive mode, theming, extensions)
+pnpm test
+
+# 3. Typecheck all packages
+pnpm run typecheck
+
+# 4. Build all frontend packages (preload, loader UI, companion app)
+pnpm run build
+
+# 5. Start development servers
+pnpm run dev:app       # Companion app Vite dev server
+pnpm run dev:loader    # Desktop launcher Vite dev server
+pnpm run dev:plugins   # Preload bundle Vite dev server
+```
+
+---
+
+## 📄 License & Attribution
+
+This project is licensed under the **MIT License**.
+
+- Upstream code: `Copyright (c) 2024 Pengu Loader`
+- Additions & modifications: `Copyright (c) 2026 Riot Loader contributors`
+
+See the [`LICENSE`](LICENSE) file for the full license text.
+
+---
+
+## ⚠️ Disclaimer
+
+Riot Loader is not affiliated with, endorsed, or sponsored by Riot Games, Inc. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. Use of client modifications is subject to Riot Games' Terms of Service.
